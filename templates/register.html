@@ -1,0 +1,22 @@
+<html>
+<head>
+<title> New Account</title>
+</head>
+
+<body>
+<form action="/check_register" method="GET">
+
+            {{msg}}
+            </font>
+
+            <br>
+            Username: <input type="text" name="username" required>
+            <br>
+            Password: <input type="password" name="password1" required>
+            <br>
+	    Confirm Password: <input type="password" name="password2" required>
+            <input type="submit" name="Signup" value="Sign Up">
+</form>
+Have an Account? <a href="/login"> Login </a>
+</body>
+</html>
