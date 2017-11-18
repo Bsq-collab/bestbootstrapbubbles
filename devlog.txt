@@ -53,3 +53,6 @@ added functions for musixmatch
 bayanB -- 2017-11-17 19:13:05
 customize template done
 
+bayanB -- 2017-11-18 10:34:39
+fixed design doc
+
