@@ -1,12 +1,10 @@
-from flask import Flask
-from flask import Response
-from flask import redirect
-from flask import url_for
-from typing import Any, List, Callable, Dict
+from typing import Any, Callable, Dict, List
 
-from oop import override
+from flask import Flask, Response, redirect, url_for
+from util.oop import override
 from template_context import context
-from util.flask_utils_types import Function, Route
+from util.flask.flask_utils_types import Route
+from util.types import Function
 
 RouteExtension = Function[Route, Any]
 

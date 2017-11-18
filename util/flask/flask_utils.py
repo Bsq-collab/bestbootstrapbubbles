@@ -3,16 +3,11 @@ from __future__ import print_function
 from functools import wraps
 from sys import stderr
 
-from flask import Flask
-from flask import Response
-from flask import redirect
-from flask import request
-from flask import session
-from flask import url_for
-from typing import KeysView, List, Any, Dict, Set, Callable, Tuple, Type, Iterable
+from typing import Any, Callable, Dict, Iterable, KeysView, List, Set, Tuple, Type
 
-from oop import extend
-from util.flask_utils_types import Route, Router, Precondition
+from flask import Flask, Response, redirect, request, session, url_for
+from util.flask.flask_utils_types import Precondition, Route, Router
+from util.oop import extend
 
 
 def reroute_to(route_func, *args, **kwargs):
@@ -60,9 +55,9 @@ def reroute_from(app, rule, **options):
     """
     Redirect the given rule and options to the route it is decorating.
 
-    :param app: this app
-    :param rule: rule from @app.route
-    :param options: options from @app.route
+    :param app: this core
+    :param rule: rule from @core.route
+    :param options: options from @core.route
     :return: a decorator that adds the redirecting logic
     """
 
@@ -85,7 +80,7 @@ def reroute_from(app, rule, **options):
             return reroute_to(func_to_reroute)
 
         # uniquely modify the rerouter name
-        # so @app.route will have a unique function name
+        # so @core.route will have a unique function name
         # the next time reroute_from is called
         rerouter.func_name += '_for_' + func_to_reroute.func_name
         app.route(rule, **options)(rerouter)

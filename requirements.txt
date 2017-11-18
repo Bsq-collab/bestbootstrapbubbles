@@ -1,3 +1,6 @@
+intbitset
+simplejson
+passlib
 typing
 flask
 werkzeug

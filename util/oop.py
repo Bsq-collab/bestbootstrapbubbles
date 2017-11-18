@@ -1,6 +1,6 @@
-from typing import Type, Callable, Any, Dict, Tuple, Union
+from typing import Any, Callable, Dict, Tuple, Type, Union
 
-from util.flask_utils_types import Function
+from util.flask.flask_utils_types import Function
 
 T = Type['CtorArgs']  # class type
 R = Type['R']  # return type

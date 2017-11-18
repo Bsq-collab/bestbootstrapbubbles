@@ -103,3 +103,5 @@ ENV/
 /ts/
 
 .idea/
+
+*secrets*

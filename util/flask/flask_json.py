@@ -11,9 +11,7 @@ from util.oop import override
 
 def serialize_named_tuple(named_tuple):
     # type: (NamedTuple) -> Dict[str, Any]
-    fields = named_tuple._asdict()
-    fields['_type'] = repr(type(named_tuple))
-    return fields
+    return {'_type': repr(type(named_tuple)), 'fields': named_tuple}
 
 
 @override(sessions)
@@ -35,9 +33,7 @@ class NamedTupleJsonEncoder(JSONEncoder):
         # type: (Any) -> Dict[str, Any] | Any
         if not hasattr(o, '_asdict'):
             return o
-        fields = dict(o._asdict())
-        fields['_type'] = repr(type(o))
-        return fields
+        return serialize_named_tuple(o)
 
     def default(self, o):
         # type: (Any) -> Dict[str, Any]
@@ -62,7 +58,8 @@ class NamedTupleJsonDecoder(JSONDecoder):
                     return obj
                 else:
                     return _super(obj)
-            return all_namedtuples[obj.pop('_type')](**obj)
+            # noinspection PyProtectedMember
+            return all_namedtuples[obj['_type']]._make(obj['fields'])
         return object_hook
 
 

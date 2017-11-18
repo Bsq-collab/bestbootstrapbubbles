@@ -41,7 +41,47 @@ tales of wisdom gained...
    \:\/.:| |\:\____/\\ ..::/ / \:\/___/\\:\_\ \ \\:\_\ \ \
     \____/_/ \_____\/ \___/_(   \_____\/ \_____\/ \_____\/
 ==============================================================
+bayanB -- 2017-11-17 08:13:47
+Login welcome and register
 
 senK -- 2017-11-17 09:10:26
 Added util files from last project.
 
+naotakaK -- 2017-11-17 13:09:59
+added functions for musixmatch
+
+bayanB -- 2017-11-17 19:13:05
+customize template done
+
+bayanB -- 2017-11-18 10:34:39
+fixed design doc
+
+khyberS -- 2017-11-18 11:37:53
+Added ListenUpDatabase class as a DB wrapper that exposes all the necessary APIs/methods
+    needed in the app (i.e. the flask part).
+ListenUpDatabase uses the classes User, Question, and Song that hold all the data
+    that is stored in the corresponding DB tables.
+There a few exceptions for User:
+    The password isn't stored in the User so that it's secure.
+    User also stores info specific to a single game/session the user plays,
+        which changes every time and is not persisted in the DB.
+Question and Song have a mutable audio_path:
+    They need to download the audio from the Watson Text-to-Speech API.
+    This isn't done immediately by the other APIs that retrieve the text,
+    but instead, Question and Song have a download_audio() method
+    that downloads the audio and adds the path to the object.
+The Python hooks for the web APIs used, the music, text-to-speech, and trivia questions,
+    are exposed in the modules in api/: music.py, text_to_speech.py, and trivia.py.
+    We still need to implement these; I finished the text_to_speech one.
+Question, Song, and ListenUpDatabase use these APIs to maintain the application state.
+All the API keys, etc. are stored in secrets.py right now and are imported into the api modules.
+    I didn't add secrets.py to the repo, but I can send it privately.
+    We can always easily change the format of the secrets, too.
+The real app.py is in core/.
+    It has all the routes and stuff, but the app.py we run is still in the main directory.
+    It just calls the other app.py's run() function.
+app.py is filled with some of the same routes from the last project that deal with accounts.
+app.py also has a bunch of unimplemented routes
+    that do some of the other stuff our website is supposed to do.
+I'm not exactly sure how the templates already created are meant to interact with Flask,
+    so I tried to coordinate them where I could, but for some of the stuff I'm not sure.
