@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title></title>
+  </head>
+
+  <body>
+    <form method="GET">
+      Difficulty: <br>
+      <select name="difficulty">
+        <option selected> No preference </option>
+        {% for diff in difficulties %}
+        <option> {{ diff }}</option>
+        {% endfor %}
+      </select>
+
+      Category:<br>
+      <select name="category">
+        <option selected> No preference </option>
+        {% for cat in categories %}
+        <option> {{ cat }}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" name="customization" value="Done">
+    </form>
+  </body>
