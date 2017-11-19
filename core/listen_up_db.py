@@ -31,7 +31,7 @@ SCHEMA = dict(
             category TEXT NOT NULL,
             audio_path TEXT NOT NULL
         )''',
-        # questions will be a binary numpy array
+        # questions will be a binary python buffer from the intbitset
         
         songs='''
         CREATE TABLE IF NOT EXISTS songs(
