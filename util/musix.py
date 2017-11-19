@@ -1,6 +1,6 @@
 import random, requests
 
-###Returns a song from top num_songs songs from country country -- need to add get title and get artist
+###Returns a song from top num_songs of country country in form {artist, title, id}
 def get_song(num_songs, country, key):
 
     ##Filtering songs that are not instrumental, have lyrics, from specified country, are not explicit
@@ -12,7 +12,9 @@ def get_song(num_songs, country, key):
 
     ##Returning track_id of specified songs
     d = r.json()
-    return d["message"]["body"]["track_list"][song]["track"]["track_id"]
+    ret = d["message"]["body"]["track_list"][song]["track"]
+    return_dict = {'artist': ret["artist_name"], 'title' : ret["track_name"], 'id' : ret["track_id"]}
+    return return_dict
 
 ###Getting lyrics of a song based on track id (found using get_song)
 def get_lyrics(id, key):

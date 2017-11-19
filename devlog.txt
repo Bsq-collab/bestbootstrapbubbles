@@ -89,3 +89,6 @@ I'm not exactly sure how the templates already created are meant to interact wit
 khyberS -- 2017-11-19 10:43:15
 Fixed bugs in ListenUpDatabase, incl. forgetting to commit the DB.
 
+naotakaK -- 2017-11-19 18:32:44
+get_song returns artist, title and song id
+
