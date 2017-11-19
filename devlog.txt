@@ -44,7 +44,7 @@ tales of wisdom gained...
 bayanB -- 2017-11-17 08:13:47
 Login welcome and register
 
-senK -- 2017-11-17 09:10:26
+khyberS -- 2017-11-17 09:10:26
 Added util files from last project.
 
 naotakaK -- 2017-11-17 13:09:59
@@ -85,3 +85,7 @@ app.py also has a bunch of unimplemented routes
     that do some of the other stuff our website is supposed to do.
 I'm not exactly sure how the templates already created are meant to interact with Flask,
     so I tried to coordinate them where I could, but for some of the stuff I'm not sure.
+
+khyberS -- 2017-11-19 10:43:15
+Fixed bugs in ListenUpDatabase, incl. forgetting to commit the DB.
+

@@ -91,13 +91,17 @@ class ApplicationDatabase(object):
     
     :ivar schema: SQl DB schema
     :type schema: Dict[str, str]
+    
+    :ivar exception: Exception class used by DB
+    :type exception: type(ApplicationDatabaseException)
     """
     
-    def __init__(self, schema, path):
-        # type: (Dict[str, str], Union[str, unicode]) -> None
+    def __init__(self, schema, path, exception=ApplicationDatabaseException):
+        # type: (Dict[str, str], Union[str, unicode], type(ApplicationDatabaseException)) -> None
         """Create DB with given name and open low level connection through `Database`"""
         self.name = path
         self.schema = schema
+        self.exception = exception  # type:
         self.db = Database(path)
         self._create_tables()
 

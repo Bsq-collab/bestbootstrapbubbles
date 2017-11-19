@@ -64,4 +64,4 @@ class Song(AudioDownloader):
         return self.lyrics
     
     def __repr__(self):
-        return 'Song(%s, %s, %s, %s)' % self
+        return 'Song(%s, %s, %s, %s)' % self.as_tuple()

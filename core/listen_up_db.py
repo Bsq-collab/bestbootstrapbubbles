@@ -43,6 +43,10 @@ SCHEMA = dict(
 )
 
 
+class ListenUpDatabaseException(ApplicationDatabaseException):
+    pass
+
+
 # noinspection PyCompatibility
 class ListenUpDatabase(ApplicationDatabase):
     """DB wrapper for ListenUp."""
@@ -56,7 +60,7 @@ class ListenUpDatabase(ApplicationDatabase):
     
     def __init__(self, path='data/listen_up.db', audio_dir='static/audio'):
         # type: (str, str) -> None
-        super(ListenUpDatabase, self).__init__(SCHEMA, path)
+        super(ListenUpDatabase, self).__init__(SCHEMA, path, ListenUpDatabaseException)
         self.audio_dir = audio_dir  # type: str
         self.questions_dir = audio_dir + '/' + ListenUpDatabase.QUESTIONS_DIR
         self.songs_dir = audio_dir + '/' + ListenUpDatabase.SONGS_DIR
@@ -72,18 +76,18 @@ class ListenUpDatabase(ApplicationDatabase):
         Get `User` with `username` and `password`.
 
         If `username` doesn't exist or `password` doesn't match,
-        raise an `ApplicationDatabaseException` with a message.
+        raise an `self.exception` with a message.
         """
         self.db.cursor.execute(
                 'SELECT id, password, points, questions FROM users WHERE username = ?',
                 [username])
         result = self.db.cursor.fetchone()  # type: Tuple[int, unicode, int, buffer]
         if result is None:
-            raise ApplicationDatabaseException('username "{}" doesn\'t exist'.format(username))
-        hashed_password = result[1]
+            raise self.exception('username "{}" doesn\'t exist'.format(username))
+        user_id, hashed_password, points, questions = result
         if not verify_password(password, hashed_password):
-            raise ApplicationDatabaseException('wrong password for username "{}"'.format(username))
-        return User.from_db(*result)
+            raise self.exception('wrong password for username "{}"'.format(username))
+        return User.from_db(user_id, username, points, questions)
     
     def verify_user(self, username, password):
         # type: (unicode, unicode) -> bool
@@ -100,9 +104,12 @@ class ListenUpDatabase(ApplicationDatabase):
         # type: (unicode, unicode) -> User
         points = 0
         questions = intbitset()
-        self.db.cursor.execute('INSERT INTO users VALUES (NULL, ?, ?, ?, ?)',
-                               [username, hash_password(password), points, questions.fastdump()])
+        self.db.cursor.execute(
+                'INSERT INTO users VALUES (NULL, ?, ?, ?, ?)',
+                [username, hash_password(password), points, buffer(questions.fastdump())]
+        )
         user_id = self.db.cursor.lastrowid
+        self.commit()
         return User(user_id, username, points, questions)
     
     def add_user(self, username, password):
@@ -111,10 +118,10 @@ class ListenUpDatabase(ApplicationDatabase):
         Add and return `User` with `username` and `password`.
         
         If `User` with `username` already exists,
-        raise an `ApplicationDatabaseException`.
+        raise an `self.exception`.
         """
         if self.user_exists(username):
-            raise ApplicationDatabaseException('username "{}" already exists'.format(username))
+            raise self.exception('username "{}" already exists'.format(username))
         return self._add_user_hard(username, password)
     
     def update_password(self, user, password):
@@ -122,12 +129,14 @@ class ListenUpDatabase(ApplicationDatabase):
         """Update password to `password` for `user`."""
         self.db.cursor.execute('UPDATE users SET password = ? WHERE id = ?',
                                [hash_password(password), user.id])
+        self.commit()
     
     def update_user_stats(self, user):
         # type: (User) -> None
         """Update `user`'s stats in DB according to fields of `user` (not username or password)."""
         self.db.cursor.execute('UPDATE users SET points = ?, questions = ? WHERE id = ?',
                                [user.points, user.serialize_questions(), user.id])
+        self.commit()
     
     # Question stuff
     
@@ -137,6 +146,7 @@ class ListenUpDatabase(ApplicationDatabase):
                 'INSERT INTO questions VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)',
                 (question.serialize_choices().as_tuple() for question in questions)
         )
+        self.commit()
     
     def add_questions(self, user, num_questions=None):
         # type: (User, int) -> None
@@ -150,7 +160,7 @@ class ListenUpDatabase(ApplicationDatabase):
         # type: (int) -> Question
         """Get `Question` with `question_id`."""
         self.db.cursor.execute(
-                'SELECT question, answer, coices, '
+                'SELECT question, answer, choices, '
                 'type, difficulty, category, audio_path '
                 'FROM questions WHERE id = ?',
                 [question_id]
@@ -188,6 +198,7 @@ class ListenUpDatabase(ApplicationDatabase):
         # type: (Song) -> int
         """Insert `song` into DB and return id."""
         self.db.cursor.execute('INSERT INTO songs VALUES (NULL, ?, ?, ?)', song.as_tuple())
+        self.commit()
         return self.db.cursor.lastrowid
     
     def random_song(self):

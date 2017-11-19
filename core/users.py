@@ -1,22 +1,9 @@
 from intbitset import intbitset
 
-from typing import Any, Dict, Tuple, Union, Iterable
+from typing import Any, Dict, Iterable, Tuple
 
 from core.questions import Question
-from util.namedtuple_factory import NamedTuple, register_namedtuple
-
-_User = NamedTuple(
-        'User',
-        [
-            ('id', int),
-            ('username', unicode),
-            ('points', int),
-            ('questions', intbitset),
-            ('options', Dict[str, Any])
-        ]
-)  # type: Union[NamedTuple, Tuple[int, unicode, int, intbitset]]
-
-_User.__repr__ = lambda self: 'User(%s, %s, %s, %s)' % self
+from util.namedtuple_factory import register_namedtuple
 
 
 @register_namedtuple
@@ -60,7 +47,7 @@ class User(object):
     DEFAULT_WINNING_POINTS = 5
     
     def __init__(self, id, username, points, questions,
-                 last_question_id = None, starting_points=None, winning_points=None, options=None):
+                 last_question_id=None, starting_points=None, winning_points=None, options=None):
         # type: (int, unicode, int, intbitset, int, int, int, Dict[str, Any]) -> None
         self.id = id
         self.username = username
@@ -80,7 +67,7 @@ class User(object):
         if options is None:
             options = {}
         self.options = options
-        
+    
     @classmethod
     def _make(cls, fields):
         # type: (Iterable[Any]) -> User
@@ -90,18 +77,18 @@ class User(object):
         # type: () -> Tuple[int, unicode, int, intbitset, int, int, int, Dict[str, Any]]
         return self.id, self.username, self.points, self.question, \
                self.last_question_id, self.starting_points, self.winning_points, self.options
-
+    
     @classmethod
     def from_db(cls, id, username, points, questions_buf):
         # type: (int, unicode, int, buffer) -> User
         questions_set = intbitset()
-        questions_set.fastload(questions_buf)
+        questions_set.fastload(str(questions_buf))
         return cls(id, username, points, questions_set)
-
+    
     def serialize_questions(self):
         # type: () -> buffer
-        return self.question.fastdump()
-
+        return buffer(self.question.fastdump())
+    
     def complete_question(self, question):
         # type: (Question) -> None
         """Complete `question` for self, incrementing points and questions."""
@@ -117,6 +104,6 @@ class User(object):
         # type: () -> bool
         """Check if user has won game yet."""
         return self.current_game_points() > self.winning_points
-
+    
     def __repr__(self):
-        return 'User(%s, %s, %s, %s)' % self
+        return 'User(%s, %s, %s, %s, %s, %s, %s, %s)' % self.as_tuple()

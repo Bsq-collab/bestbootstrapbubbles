@@ -108,7 +108,7 @@ class Question(AudioDownloader):
         return self
     
     def __repr__(self):
-        return 'Question(%s, %s, %s, %s, %s, %s, %s, %s, %s)' % self
+        return 'Question(%s, %s, %s, %s, %s, %s, %s, %s)' % self.as_tuple()
 
 
 def get_questions(options, num_questions, dir_path):

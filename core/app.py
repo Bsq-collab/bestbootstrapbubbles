@@ -7,7 +7,7 @@ from flask import Flask, Response, flash, render_template, request, session
 from typing import Callable
 from werkzeug.datastructures import ImmutableMultiDict
 
-from core.listen_up_db import ListenUpDatabase
+from core.listen_up_db import ListenUpDatabase, ListenUpDatabaseException
 from core.users import User
 from util.db.db import ApplicationDatabaseException
 from util.flask.flask_json import use_named_tuple_json
@@ -65,7 +65,8 @@ def auth_or_signup(db_user_supplier):
     with db:
         try:
             user = db_user_supplier(username, password)
-        except ApplicationDatabaseException as e:
+        except db.exception as e:
+            e = e  # type: db.exception
             flash(e.message)
             print(e, file=stderr)
             return reroute_to(login)
