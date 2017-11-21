@@ -41,6 +41,7 @@ tales of wisdom gained...
    \:\/.:| |\:\____/\\ ..::/ / \:\/___/\\:\_\ \ \\:\_\ \ \
     \____/_/ \_____\/ \___/_(   \_____\/ \_____\/ \_____\/
 ==============================================================
+
 bayanB -- 2017-11-17 08:13:47
 Login welcome and register
 
@@ -95,3 +96,9 @@ get_song returns artist, title and song id
 brianL -- 2017-11-21 01:37:34
 I made the get trivia questions function. It's somewhat customizable
 
+khyberS -- 2017-11-21 15:35:38
+Changed answer_questions() route to render_template() won.jinja2 if the user has won,
+    instead of just passing a boolean to questions.jinja2, the normal template.
+Also realized that ListenUpDatabase.add_questions() need to check for duplicated questions
+    returned by the API, so that the database questions remain unique.
+    I didn't fix this yet, but I will.

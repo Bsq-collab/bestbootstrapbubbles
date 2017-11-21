@@ -142,6 +142,7 @@ class ListenUpDatabase(ApplicationDatabase):
     
     def _insert_questions(self, questions):
         # type: (Iterable[Question]) -> None
+        # FIXME must ensure that these new questions are unique w.r.t to already inserted questions
         self.db.cursor.executemany(
                 'INSERT INTO questions VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)',
                 (question.serialize_choices().as_tuple() for question in questions)
@@ -151,6 +152,7 @@ class ListenUpDatabase(ApplicationDatabase):
     def add_questions(self, user, num_questions=None):
         # type: (User, int) -> None
         """Add `num_questions` `Question`s to DB according to `user`'s options."""
+        # FIXME must ensure that these new questions are unique w.r.t to already inserted questionspowe
         if num_questions is None:
             num_questions = ListenUpDatabase.DEFAULT_BUF_SIZE
         questions = get_questions(user.options, num_questions, self.questions_dir)

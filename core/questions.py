@@ -93,7 +93,7 @@ class Question(AudioDownloader):
     def text(self):
         # type: () -> unicode
         """Convert entire question to text Watson will read."""
-        return u'Question is: {}.  The choices are: {}.  Select the correct answer.'\
+        return u'The question is: {}.  The choices are: {}.  Select the correct answer.'\
             .format(self.question, u', '.join(self.choices))
     
     def serialize_choices(self):
