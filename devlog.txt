@@ -92,3 +92,6 @@ Fixed bugs in ListenUpDatabase, incl. forgetting to commit the DB.
 naotakaK -- 2017-11-19 18:32:44
 get_song returns artist, title and song id
 
+brianL -- 2017-11-21 01:37:34
+I made the get trivia questions function. It's somewhat customizable
+
