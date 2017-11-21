@@ -72,7 +72,7 @@ class Question(AudioDownloader):
         """Create Question from JSON from trivia.py."""
         answer = json['answer']
         choices = [answer]
-        choices.extend(json['incorrect_answers'])  # FIXME might be wrong field name
+        choices.extend(json['incorrect_answers'])
         return cls(
                 id=None,
                 question=json['question'],
@@ -87,15 +87,14 @@ class Question(AudioDownloader):
     def filename(self):
         # type: () -> str
         """Create filename used for saving audio file."""
-        # TODO
-        pass
+        return str(self.id)
     
     @override
     def text(self):
         # type: () -> unicode
         """Convert entire question to text Watson will read."""
-        # TODO
-        pass
+        return u'Question is: {}.  The choices are: {}.  Select the correct answer.'\
+            .format(self.question, u', '.join(self.choices))
     
     def serialize_choices(self):
         # type: () -> Question
@@ -103,7 +102,6 @@ class Question(AudioDownloader):
         Serialize (JSONify) choices list to insert into SQLite DB.
         Return self for chaining.
         """
-        # noinspection PyAttributeOutsideInit
         self.choices = json.dumps(self.choices)
         return self
     

@@ -55,7 +55,7 @@ class Song(AudioDownloader):
     def filename(self):
         # type: () -> str
         """Create filename used for saving audio file."""
-        return io.sanitize_filename(self.name)
+        return '{}. {}'.format(self.id, io.sanitize_filename(self.name))
 
     @override
     def text(self):
