@@ -96,6 +96,9 @@ get_song returns artist, title and song id
 brianL -- 2017-11-21 01:37:34
 I made the get trivia questions function. It's somewhat customizable
 
+brianL -- 2017-11-21 13:18:52
+changed trivia.py to use requests instead of urllib2
+
 khyberS -- 2017-11-21 15:35:38
 Changed answer_questions() route to render_template() won.jinja2 if the user has won,
     instead of just passing a boolean to questions.jinja2, the normal template.
