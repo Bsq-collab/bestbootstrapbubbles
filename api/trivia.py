@@ -38,6 +38,7 @@ def get_questions(amount,typing=0,category=0,difficulty=0):
 '''
 This will help return a query string 
 '''
+
 def query_help(amount,typing,category,difficulty):
 	retstring = ""
 	typearr = ["","multiple","boolean"]
