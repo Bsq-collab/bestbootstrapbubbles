@@ -1,5 +1,5 @@
 #!usr/bin/python
-import urllib2, json
+import requests, json
 
 #from typing import Dict, Any, Iterable
 
@@ -19,24 +19,28 @@ Guide to arguments:
 
 int amount - amount of questions to request, do not exceed 50
 int typing - 1:multiple, 2:boolean
-int category - *see json list of all categories, in the opentrivia documentation
+int category - *see bottom for corresponding categories
 int difficulty - 1:easy, 2:med, 3:hard
 '''
 def get_questions(amount,typing=0,category=0,difficulty=0):
 	source = "https://opentdb.com/api.php?"+query_help(amount,typing,category,difficulty)
-	datastuff = urllib2.urlopen(source)
-	jason = datastuff.read()
-	d = json.loads(jason)
-	results = d["results"]
-	#ignore
+	datastuff = requests.get(source)
+	datastuff = datastuff.json()
+	results = datastuff["results"]
+	return results
+	#ignore:
+	#jason = datastuff.read()
+	#d = json.loads(jason)
+	'''
 	target = []
 	for item in results:
 		tempdict = {}
 		tempdict["question"]
-	return results
+		'''
+	#rint results
 
 '''
-This will help return a query string 
+query_help will help return a query string 
 '''
 
 def query_help(amount,typing,category,difficulty):
@@ -48,3 +52,31 @@ def query_help(amount,typing,category,difficulty):
 	if category<9: retstring+="&category="+str(category)
 	if difficulty!=0: retstring+="&difficulty="+diffarr[difficulty]
 	return retstring
+
+'''
+Corresponding Categories 
+ [9, 'General Knowledge']
+ [10, 'Entertainment: Books']
+ [11, 'Entertainment: Film']
+ [12, 'Entertainment: Music']
+ [13, 'Entertainment: Musicals & Theatres']
+ [14, 'Entertainment: Television']
+ [15, 'Entertainment: Video Games']
+ [16, 'Entertainment: Board Games']
+ [17, 'Science & Nature']
+ [18, 'Science: Computers']
+ [19, 'Science: Mathematics']
+ [20, 'Mythology']
+ [21, 'Sports']
+ [22, 'Geography']
+ [23, 'History']
+ [24, 'Politics']
+ [25, 'Art']
+ [26, 'Celebrities']
+ [27, 'Animals']
+ [28, 'Vehicles']
+ [29, 'Entertainment: Comics']
+ [30, 'Science: Gadgets']
+ [31, 'Entertainment: Japanese Anime & Manga']
+ [32, 'Entertainment: Cartoon & Animations']
+'''
