@@ -4,15 +4,16 @@ import requests
 from typing import Tuple
 
 
-def get_song(num_songs, country, key):
-    """Return a song from top `num_songs` of `country` in the form {artist, title, id}."""
+def get_song(num_songs, song, country, key):
+    """Return a song #`song` from top `num_songs` of `country` in the form {artist, title, id}."""
     # Filtering songs that are not instrumental, have lyrics,
     # from specified country, are not explicit
     payload = {'apikey': key, 'page': '1', 'page_size': str(num_songs), 'country': country, 'f_has_lyrics': '1', 'f_is_instrumental': '0', 'f_is_explicit': '0'}
     r = requests.get("https://api.musixmatch.com/ws/1.1/chart.tracks.get", params=payload)
-    
+    '''
     # Getting random number between 0 and num_songs - 1
     song = random.randint(0, num_songs - 1)
+    '''
     
     # Returning track_id of specified songs
     d = r.json()
@@ -64,8 +65,8 @@ def bleeper(lyrics):
     
     return lyrics
 
-print get_song(5, "us", "7e08dd0d22a97575c80eda84bbfeb353")
-#print bleeper(get_lyrics(136765439, '7e08dd0d22a97575c80eda84bbfeb353'))
+print get_song(5, "us", 1, 'INSERT_KEY_HERE')
+#print bleeper(get_lyrics(136765439, 'INSERT_KEY_HERE'))
 
 def random_song(key):
     # type: () -> Tuple[unicode, unicode]

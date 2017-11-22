@@ -111,3 +111,6 @@ Created a questions.html and congrats.html. Congrats just prints congrats {{user
 naotakaK -- 2017-11-22 11:33:22
 Updated music.py to allow for bleeping of bad words. random_song doesn't return anything yet, but has all the appropriate values (artist, lyrics, title, track_id)
 
+naotakaK -- 2017-11-22 12:49:35
+Removed API key from file and made get_song return a particular song instead of random
+
