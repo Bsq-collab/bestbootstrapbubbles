@@ -7,9 +7,8 @@ from flask import Flask, Response, flash, render_template, request, session
 from typing import Callable
 from werkzeug.datastructures import ImmutableMultiDict
 
-from core.listen_up_db import ListenUpDatabase, ListenUpDatabaseException
+from core.listen_up_db import ListenUpDatabase
 from core.users import User
-from util.db.db import ApplicationDatabaseException
 from util.flask.flask_json import use_named_tuple_json
 from util.flask.flask_utils import form_contains, post_only, preconditions, reroute_to, \
     session_contains
@@ -101,12 +100,14 @@ def answer_question():
     # type: () -> Response
     """Display a User's home page with all of his edited and unedited Stories."""
     user = get_user()
-    with db:
-        return render_template('questions.jinja2',
-                               user=user,
-                               question=db.next_question(user),
-                               song=db.random_song() if user.has_won() else None
-                               )
+    if user.has_won():
+        return render_template('won.jinja2', user=user, song=db.random_song())
+    else:
+        with db:
+            return render_template('questions.jinja2',
+                                   user=user,
+                                   question=db.next_question(user),
+                                   )
 
 
 @app.route('/check_question', methods=['get', 'post'])
