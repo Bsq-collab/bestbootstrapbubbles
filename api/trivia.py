@@ -1,14 +1,7 @@
 #!usr/bin/python
 import requests, json
 
-#from typing import Dict, Any, Iterable
-
-# def get_questions(options, num_questions):
-    # type: (Dict[str, Any], int) -> Dict[str, Any]
-    # """Download JSON of `num_questions` questions with `options`."""
-    # TODO
-    # pass
-
+#USE YOUR VIRTUAL ENVIRONMENT IF REQUESTS IS NOT THERE#
 
 '''
 This will return a list of dictionaries of questions in this format
@@ -17,30 +10,24 @@ This will return a list of dictionaries of questions in this format
 
 Guide to arguments:
 
-int amount - amount of questions to request, do not exceed 50
+int amount - amount of questions to request, do not exceed 50.
+
+--The args below are optional--
 int typing - 1:multiple, 2:boolean
-int category - *see bottom for corresponding categories
+int category - *see bottom of file for corresponding categories
 int difficulty - 1:easy, 2:med, 3:hard
 '''
 def get_questions(amount,typing=0,category=0,difficulty=0):
-	source = "https://opentdb.com/api.php?"+query_help(amount,typing,category,difficulty)
+	querystr = query_help(amount,typing,category,difficulty)
+	#print querystr
+	source = "https://opentdb.com/api.php?"+querystr
 	datastuff = requests.get(source)
 	datastuff = datastuff.json()
 	results = datastuff["results"]
 	return results
-	#ignore:
-	#jason = datastuff.read()
-	#d = json.loads(jason)
-	'''
-	target = []
-	for item in results:
-		tempdict = {}
-		tempdict["question"]
-		'''
-	#rint results
 
 '''
-query_help will help return a query string 
+query_help will help return a query string for things above 
 '''
 
 def query_help(amount,typing,category,difficulty):
