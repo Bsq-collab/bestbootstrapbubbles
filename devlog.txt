@@ -95,3 +95,6 @@ get_song returns artist, title and song id
 brianL -- 2017-11-21 01:37:34
 I made the get trivia questions function. It's somewhat customizable
 
+bayanB -- 2017-11-21 20:44:15
+Created a questions.html and congrats.html. Congrats just prints congrats {{user}} and links to customize and logout. and questions will print the question and answer choices
+

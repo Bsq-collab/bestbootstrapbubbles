@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    Question: {{ question.question }}
+    <br>
+    Answer choices:
+    {% for element in question.choices %}
+
+    {{ element }}
+
+    {% endfor %}
+    <form>
+      <input type="text" name="input" text="answer">
+      <input type="submit" name="done" value="done">
+    </form>
+  </body>
+</html>
