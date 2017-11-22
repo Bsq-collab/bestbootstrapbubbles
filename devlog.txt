@@ -108,3 +108,6 @@ Also realized that ListenUpDatabase.add_questions() need to check for duplicated
 
 bayanB -- 2017-11-21 20:44:15
 Created a questions.html and congrats.html. Congrats just prints congrats {{user}} and links to customize and logout. and questions will print the question and answer choices
+naotakaK -- 2017-11-22 11:33:22
+Updated music.py to allow for bleeping of bad words. random_song doesn't return anything yet, but has all the appropriate values (artist, lyrics, title, track_id)
+
