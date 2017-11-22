@@ -21,7 +21,7 @@ def get_song(num_songs, song, country, key):
     ret = d["message"]["body"]["track_list"][song]["track"]
 
     # Getting clean lyrics
-    lyrics = bleeper(get_lyrics(ret["track_id"], key))
+    lyrics = get_lyrics(ret["track_id"], key)
     #print "\n\n\nTRACK ID" + str(ret["track_id"]) + "\n\n\n"
 
     # Returning dictionary with artist, title, lyrics, track_id
@@ -37,29 +37,6 @@ def get_lyrics(id, key):
     r = requests.get("https://api.musixmatch.com/ws/1.1/track.lyrics.get", params=payload)
     d = r.json()
     lyrics = d["message"]["body"]["lyrics"]["lyrics_body"]
-    return lyrics
-
-def bleeper(lyrics):
-    """Replaces bad words and cleans up lyrics string."""
-
-    # Lowercase to allow for easier filtering
-    lyrics = lyrics.lower()
-
-    # Filtering curses and other bad words
-    lyrics = lyrics.replace("fuck", "heck")
-    lyrics = lyrics.replace("shit", "shoot")
-    lyrics = lyrics.replace("bitch", "beep")
-    lyrics = lyrics.replace(" damn", " dang")
-    lyrics = lyrics.replace("cocaine", "coca-cola")
-
-    # Removing copyright stuff at end of lyrics
-    lyrics = lyrics.replace("...\n\n******* this lyrics is not for commercial use *******\n(1409616514838)", "")
-
-    '''
-    # Replace newlines with spaces
-    lyrics = lyrics.replace("\n", " ")
-    '''
-    
     return lyrics
 
 #print get_song(5, "us", 1, 'INSERT_KEY_HERE')

@@ -5,10 +5,11 @@ from api.text_to_speech import AudioDownloader
 from util import io
 from util.annotations import override
 from util.namedtuple_factory import register_namedtuple
+from util.tupleable import Tupleable
 
 
 @register_namedtuple
-class Song(AudioDownloader):
+class Song(Tupleable, AudioDownloader):
     """
     Song POPO.
     
@@ -41,7 +42,7 @@ class Song(AudioDownloader):
     def as_tuple(self):
         # type: () -> Tuple[int, unicode, unicode, str]
         return self.id, self.name, self.lyrics, self.audio_path
-
+    
     @classmethod
     def random(cls, dir_path):
         # type: (str) -> Song
@@ -56,12 +57,28 @@ class Song(AudioDownloader):
         # type: () -> str
         """Create filename used for saving audio file."""
         return '{}. {}'.format(self.id, io.sanitize_filename(self.name))
-
+    
+    def bleeped_lyrics(self):
+        # type: () -> unicode
+        """Replaces bad words and cleans up lyrics string."""
+    
+        replacements = {
+            'fuck': 'heck',
+            'shit': 'shoot',
+            'bitch': 'beep',
+            'damn': 'dang',
+            'cocaine': 'coca-cola',
+            '...\n\n******* this lyrics is not for commercial use *******\n(1409616514838)': '',
+            '\n': ' '
+        }
+    
+        lyrics = self.lyrics.lower()
+        for replacing, replacement in replacements.viewvalues():
+            lyrics = lyrics.replace(replacing, replacement)
+        return lyrics
+    
     @override
     def text(self):
         # type: () -> unicode
         """Convert entire question to text Watson will read."""
-        return self.lyrics
-    
-    def __repr__(self):
-        return 'Song(%s, %s, %s, %s)' % self.as_tuple()
+        return self.bleeped_lyrics()

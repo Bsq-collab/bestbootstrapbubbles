@@ -5,10 +5,11 @@ from api import text_to_speech, trivia
 from api.text_to_speech import AudioDownloader
 from util.annotations import override
 from util.namedtuple_factory import register_namedtuple
+from util.tupleable import Tupleable
 
 
 @register_namedtuple
-class Question(AudioDownloader):
+class Question(Tupleable, AudioDownloader):
     """
     Trivia question POPO.
     
@@ -55,6 +56,7 @@ class Question(AudioDownloader):
         # type: (Iterable[Any]) -> Question
         return cls(*fields)
     
+    @override
     def as_tuple(self):
         # type: () -> Tuple[int, unicode, unicode, List[unicode], unicode, unicode, unicode, str]
         return self.id, self.question, self.answer, self.choices, \

@@ -3,11 +3,13 @@ from intbitset import intbitset
 from typing import Any, Dict, Iterable, Tuple
 
 from core.questions import Question
+from util.annotations import override
 from util.namedtuple_factory import register_namedtuple
+from util.tupleable import Tupleable
 
 
 @register_namedtuple
-class User(object):
+class User(Tupleable):
     """
     User POPO.
     
@@ -73,6 +75,7 @@ class User(object):
         # type: (Iterable[Any]) -> User
         return cls(*fields)
     
+    @override
     def as_tuple(self):
         # type: () -> Tuple[int, unicode, int, intbitset, int, int, int, Dict[str, Any]]
         return self.id, self.username, self.points, self.question, \
@@ -104,6 +107,3 @@ class User(object):
         # type: () -> bool
         """Check if user has won game yet."""
         return self.current_game_points() > self.winning_points
-    
-    def __repr__(self):
-        return 'User(%s, %s, %s, %s, %s, %s, %s, %s)' % self.as_tuple()
