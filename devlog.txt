@@ -40,6 +40,15 @@ tales of wisdom gained...
   \:\ \ \ \\::___\/_\:\_/.:\ \\:\ \____\:\ \ \ \\:\\_  _\/
    \:\/.:| |\:\____/\\ ..::/ / \:\/___/\\:\_\ \ \\:\_\ \ \
     \____/_/ \_____\/ \___/_(   \_____\/ \_____\/ \_____\/
+
+
+__________      __________      __________
+\______   \     \______   \     \______   \
+ |    |  _/      |    |  _/      |    |  _/
+ |    |   \      |    |   \      |    |   \
+ |______  / /\   |______  / /\   |______  / /\
+        \/  \/          \/  \/          \/  \/
+
 ==============================================================
 
 bayanB -- 2017-11-17 08:13:47
@@ -113,4 +122,5 @@ Updated music.py to allow for bleeping of bad words. random_song doesn't return 
 
 naotakaK -- 2017-11-22 12:49:35
 Removed API key from file and made get_song return a particular song instead of random
+Added new ASCII to devlog, and cleaned up api/music.py
 

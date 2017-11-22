@@ -8,6 +8,7 @@ def get_song(num_songs, song, country, key):
     """Return a song #`song` from top `num_songs` of `country` in the form {artist, title, id}."""
     # Filtering songs that are not instrumental, have lyrics,
     # from specified country, are not explicit
+    
     payload = {'apikey': key, 'page': '1', 'page_size': str(num_songs), 'country': country, 'f_has_lyrics': '1', 'f_is_instrumental': '0', 'f_is_explicit': '0'}
     r = requests.get("https://api.musixmatch.com/ws/1.1/chart.tracks.get", params=payload)
     '''
@@ -21,17 +22,17 @@ def get_song(num_songs, song, country, key):
 
     # Getting clean lyrics
     lyrics = bleeper(get_lyrics(ret["track_id"], key))
-    #print "\n\n\nTRACK ID" + str(ret["track_id"]) + "\n\n\n\n"
+    #print "\n\n\nTRACK ID" + str(ret["track_id"]) + "\n\n\n"
 
     # Returning dictionary with artist, title, lyrics, track_id
     return_dict = {'artist' : ret["artist_name"], 'title' : ret["track_name"], 'lyrics' : lyrics, 'track_id' : ret["track_id"]}
-    #print bleeper(lyrics)
     
     return return_dict
 
 
 def get_lyrics(id, key):
     """Get lyrics of a song based on track id (found using `get_song`)."""
+    
     payload = {'apikey': key, 'format': 'json', 'track_id': str(id)}
     r = requests.get("https://api.musixmatch.com/ws/1.1/track.lyrics.get", params=payload)
     d = r.json()
@@ -40,11 +41,7 @@ def get_lyrics(id, key):
 
 def bleeper(lyrics):
     """Replaces bad words and cleans up lyrics string."""
-    '''
-    curses = {"fuck" : "heck", "shit" : "shoot", "hell" : "heck", "bitch" : "beep"}
-    for word in curses.iterkeys():
-        lyrics.lower().replace(word, curses[word])
-    '''
+
     # Lowercase to allow for easier filtering
     lyrics = lyrics.lower()
 
@@ -65,16 +62,17 @@ def bleeper(lyrics):
     
     return lyrics
 
-print get_song(5, "us", 1, 'INSERT_KEY_HERE')
+#print get_song(5, "us", 1, 'INSERT_KEY_HERE')
 #print bleeper(get_lyrics(136765439, 'INSERT_KEY_HERE'))
 
 def random_song(key):
-    # type: () -> Tuple[unicode, unicode]
+    # type: () -> Tuple[unicode, unicode, unicode, unicode]
     """Get name and lyrics of a random song."""
+
+    # Getting dictionary from get_song and returning values
     dict = get_song(5, 'us', key)
     name = dict["title"]
     lyrics = dict["lyrics"]
     artist = dict["artist"]
     track_id = dict["track_id"]
-    # TODO
-    return name, lyrics
+    return name, lyrics, artist, track_id
