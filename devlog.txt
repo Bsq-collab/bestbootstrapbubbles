@@ -124,3 +124,6 @@ naotakaK -- 2017-11-22 12:49:35
 Removed API key from file and made get_song return a particular song instead of random
 Added new ASCII to devlog, and cleaned up api/music.py
 
+bayanB -- 2017-11-22 12:16:31
+Completed the README deliverables except for procuring API keys
+
