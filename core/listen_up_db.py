@@ -1,5 +1,6 @@
 from intbitset import intbitset
 from random import randint
+from sqlite3 import IntegrityError
 
 from typing import Iterable, List, Tuple, Union
 
@@ -36,6 +37,7 @@ SCHEMA = dict(
         songs='''
         CREATE TABLE IF NOT EXISTS songs(
             id INTEGER PRIMARY KEY,
+            artist TEXT NOT NULL,
             name TEXT NOT NULL,
             lyrics TEXT NOT NULL,
             audio_path TEXT NOT NULL
@@ -152,7 +154,7 @@ class ListenUpDatabase(ApplicationDatabase):
     def add_questions(self, user, num_questions=None):
         # type: (User, int) -> None
         """Add `num_questions` `Question`s to DB according to `user`'s options."""
-        # FIXME must ensure that these new questions are unique w.r.t to already inserted questionspowe
+        # FIXME must ensure that these new questions are unique w.r.t to already inserted questions
         if num_questions is None:
             num_questions = ListenUpDatabase.DEFAULT_BUF_SIZE
         questions = get_questions(user.options, num_questions, self.questions_dir)
@@ -197,25 +199,31 @@ class ListenUpDatabase(ApplicationDatabase):
     # TODO How exactly are the songs being selected.
     
     def _insert_song(self, song):
-        # type: (Song) -> int
-        """Insert `song` into DB and return id."""
-        self.db.cursor.execute('INSERT INTO songs VALUES (NULL, ?, ?, ?)', song.as_tuple())
+        # type: (Song) -> bool
+        """Insert `song` into DB and return true if it is a new, unique song and was inserted."""
+        try:
+            self.db.cursor.execute('INSERT INTO songs VALUES (?, ?, ?, ?)', song.as_tuple())
+        except IntegrityError:
+            return False
         self.commit()
-        return self.db.cursor.lastrowid
+        return True
     
     def random_song(self):
         # type: () -> Song
         """Get a random `Song` in the DB."""
-        num_songs = self.db.max_rowid('songs')
-        song_id = randint(1, num_songs)
-        self.db.cursor.execute('SELECT name, lyrics, audio_path FROM songs WHERE id = ?', [song_id])
-        result = self.db.cursor.fetchone()  # type: Tuple[unicode, unicode, str]
-        name, lyrics, audio_path = result
-        return Song(song_id, name, lyrics, audio_path)
+        self.db.cursor.execute(
+                'SELECT id, name, artist, lyrics, audio_path FROM songs '
+                'LIMIT 1 ORDER BY RANDOM()'
+        )
+        result = self.db.cursor.fetchone()  # type: Tuple[int, unicode, unicode, unicode, str]
+        id, name, artist, lyrics, audio_path = result
+        return Song(id, artist, name, lyrics, audio_path)
     
     def new_song(self):
         # type: () -> Song
         """Get a random `Song` not int the DB.  Then insert it."""
-        song = Song.random(self.songs_dir)
-        song.id = self._insert_song(song)
-        return song
+        # Keep getting new random songs until a new one is found.
+        while True:
+            song = Song.random(self.songs_dir)
+            if self._insert_song(song):
+                return song

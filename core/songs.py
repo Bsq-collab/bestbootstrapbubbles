@@ -16,6 +16,9 @@ class Song(Tupleable, AudioDownloader):
     :ivar id DB id
     :type id int
     
+    :ivar artist artist of song
+    :type artist unicode
+    
     :ivar name name of song
     :type name unicode
     
@@ -27,9 +30,10 @@ class Song(Tupleable, AudioDownloader):
     :type audio_path str
     """
     
-    def __init__(self, id, name, lyrics, audio_path=None):
-        # type: (int, unicode, unicode, str) -> None
+    def __init__(self, id, artist, name, lyrics, audio_path=None):
+        # type: (int, unicode, unicode, unicode, str) -> None
         self.id = id
+        self.artist = artist
         self.name = name
         self.lyrics = lyrics
         self.audio_path = audio_path
@@ -40,15 +44,15 @@ class Song(Tupleable, AudioDownloader):
         return cls(*fields)
     
     def as_tuple(self):
-        # type: () -> Tuple[int, unicode, unicode, str]
-        return self.id, self.name, self.lyrics, self.audio_path
+        # type: () -> Tuple[int, unicode, unicode, unicode, str]
+        return self.id, self.artist, self.name, self.lyrics, self.audio_path
     
     @classmethod
     def random(cls, dir_path):
         # type: (str) -> Song
         """Create a random Song."""
-        name, lyrics = music.random_song()
-        song = cls(None, name, lyrics)
+        id, artist, name, lyrics = music.random_song()
+        song = cls(id, artist, name, lyrics)
         song.download_audio(dir_path)
         return song
     
