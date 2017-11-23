@@ -6,7 +6,7 @@ from core.questions import Question
 if __name__ == '__main__':
     db = ListenUpDatabase()
     with db:
-        # db.clear()
+        db.clear()
         try:
             db.add_user(u'Khyber', u'Sen')
         except db.exception as e:

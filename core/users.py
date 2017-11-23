@@ -2,6 +2,7 @@ from intbitset import intbitset
 
 from typing import Any, Dict, Iterable, Tuple
 
+from core.question_options import QuestionOptions
 from core.questions import Question
 from core.songs import Song
 from util.annotations import override
@@ -15,50 +16,50 @@ class User(Tupleable):
     User POPO.
     
     :cvar DEFAULT_WINNING_POINTS default winning points needed to win a game
-    :type int
+    :type DEFAULT_WINNING_POINTS int
     
     :ivar id DB id
     :type id int
     
     :ivar username username of the user
-    :type unicode
+    :type username unicode
     
     :ivar points number of points the user has,
         i.e. the number of question the user completed
-    :type int
+    :type points int
     
     :ivar questions set of question ids the user has already answered
-    :type intbitset
+    :type questions intbitset
     
     :ivar songs set of song ids the user has already answered
-    :type intbitset
+    :type songs intbitset
     
     The above fields are persisted in the DB.
     The below fields are per game and are only persisted in the HTTP session game.
     
     :ivar last_question_id the id of the last question attempted
-    :type int
+    :type last_question_id int
     
     :ivar starting_points the number of points the user started the current game with
-    :type int
+    :type starting_points int
     
     :ivar winning_points the number of points to win the current game
         defaults to `DEFAULT_WINNING_POINTS`
-    :type int
+    :type winning_points int
     
     :ivar options trivia API options for new questions
-    :type Dict[str, Any]
+    :type options Dict[str, Any]
     """
     
     DEFAULT_WINNING_POINTS = 5
     
     def __init__(self, id, username, points, questions, songs,
                  last_question_id=None, starting_points=None, winning_points=None, options=None):
-        # type: (int, unicode, int, intbitset, intbitset, int, int, int, Dict[str, Any]) -> None
+        # type: (int, unicode, int, intbitset, intbitset, int, int, int, QuestionOptions) -> None
         self.id = id
         self.username = username
         self.points = points
-        self.question = questions
+        self.questions = questions
         self.songs = songs
         
         self.last_question_id = last_question_id
@@ -72,7 +73,7 @@ class User(Tupleable):
         self.winning_points = winning_points
         
         if options is None:
-            options = {}
+            options = QuestionOptions.default()
         self.options = options
     
     @classmethod
@@ -83,7 +84,7 @@ class User(Tupleable):
     @override
     def as_tuple(self):
         # type: () -> Tuple[int, unicode, int, intbitset, intbitset, int, int, int, Dict[str, Any]]
-        return self.id, self.username, self.points, self.question, self.songs, \
+        return self.id, self.username, self.points, self.questions, self.songs, \
                self.last_question_id, self.starting_points, self.winning_points, self.options
     
     @staticmethod
@@ -117,7 +118,7 @@ class User(Tupleable):
         # type: (Question) -> None
         """Complete `question` for self, incrementing points and questions."""
         self.points += 1
-        self.question.add(question.id)
+        self.questions.add(question.id)
     
     def play_song(self, song):
         # type: (Song) -> None

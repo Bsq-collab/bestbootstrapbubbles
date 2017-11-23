@@ -3,6 +3,7 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 from api import text_to_speech, trivia
 from api.text_to_speech import AudioDownloader
+from core.question_options import QuestionOptions
 from util.annotations import override
 from util.namedtuple_factory import register_namedtuple
 from util.tupleable import Tupleable
@@ -112,7 +113,7 @@ class Question(Tupleable, AudioDownloader):
 
 
 def get_questions(options, num_questions, dir_path):
-    # type: (Dict[str, Any], int, str) -> Iterable[Question]
+    # type: (QuestionOptions, int, str) -> Iterable[Question]
     """Download and return `num_questions` Questions with `options` into `dir_path`."""
     questions_json = trivia.get_questions(options, num_questions)  # type: Iterable[Dict[str, Any]]
     for question_json in questions_json:

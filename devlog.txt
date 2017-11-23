@@ -157,3 +157,8 @@ ListenUpDatabase.add_questions() now ensures that inserted songs are completely 
     This is implemented in the method ListenUpDatabase._add_new_questions(),
     which keeps querying new questions from the trivia API to replace any duplicates found.
 
+khyberS -- 2017-11-23 03:56:46
+Finished QuestionOptions class for User.options field,
+    which decides what kinds of questions are queried for the user,
+    and which are set in the set_options() route.
+

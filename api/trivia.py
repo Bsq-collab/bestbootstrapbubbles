@@ -1,7 +1,4 @@
-#!usr/bin/python
-import requests, json
-
-#USE YOUR VIRTUAL ENVIRONMENT IF REQUESTS IS NOT THERE#
+import requests
 
 '''
 This will return a list of dictionaries of questions in this format
@@ -17,28 +14,33 @@ int typing - 1:multiple, 2:boolean
 int category - *see bottom of file for corresponding categories
 int difficulty - 1:easy, 2:med, 3:hard
 '''
-def get_questions(amount,typing=0,category=0,difficulty=0):
-	querystr = query_help(amount,typing,category,difficulty)
-	#print querystr
-	source = "https://opentdb.com/api.php?"+querystr
-	datastuff = requests.get(source)
-	datastuff = datastuff.json()
-	results = datastuff["results"]
-	return results
+
+
+def get_questions(amount, typing=0, category=0, difficulty=0):
+    querystr = query_help(amount, typing, category, difficulty)
+    # print querystr
+    source = "https://opentdb.com/api.php?" + querystr
+    datastuff = requests.get(source)
+    datastuff = datastuff.json()
+    results = datastuff["results"]
+    return results
+
 
 '''
 query_help will help return a query string for things above 
 '''
 
-def query_help(amount,typing,category,difficulty):
-	retstring = ""
-	typearr = ["","multiple","boolean"]
-	diffarr = ["","easy","medium","hard"]
-	retstring+="amount="+str(amount)
-	if typing!=0: retstring+="&type="+typearr[typing]
-	if category<9: retstring+="&category="+str(category)
-	if difficulty!=0: retstring+="&difficulty="+diffarr[difficulty]
-	return retstring
+
+def query_help(amount, typing, category, difficulty):
+    retstring = ""
+    typearr = ["", "multiple", "boolean"]
+    diffarr = ["", "easy", "medium", "hard"]
+    retstring += "amount=" + str(amount)
+    if typing != 0: retstring += "&type=" + typearr[typing]
+    if category < 9: retstring += "&category=" + str(category)
+    if difficulty != 0: retstring += "&difficulty=" + diffarr[difficulty]
+    return retstring
+
 
 '''
 Corresponding Categories 

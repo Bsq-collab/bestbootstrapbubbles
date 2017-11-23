@@ -24,7 +24,6 @@ Listen Up is a game which uses the Watson Text to Speech API, Open_Trivia API, a
 These are listed in requirements.txt:
 * typing
 * flask
-* werkzeug
 * requests
 * watson_developer_cloud
 * intbitset
@@ -33,7 +32,7 @@ These are listed in requirements.txt:
 
 We suggest using a virtual environment
 
-In order to install all dependencies run this line:
+In order to install all dependencies, run this line:
 
 ` $ pip install -r requirements.txt `
 

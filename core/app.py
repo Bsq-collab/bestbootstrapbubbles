@@ -7,6 +7,7 @@ from flask import Flask, Response, flash, render_template, request, session
 from typing import Callable
 from werkzeug.datastructures import ImmutableMultiDict
 
+from core import question_options
 from core.listen_up_db import ListenUpDatabase
 from core.users import User
 from util.flask.flask_json import use_named_tuple_json
@@ -131,15 +132,22 @@ def check_question():
 @logged_in
 def choose_options():
     # type: () -> Response
-    return render_template('choose_options.jinja2')
+    return render_template('choose_options.jinja2',
+                           types=question_options.types.viewkeys(),
+                           difficulties=question_options.difficulties.viewkeys(),
+                           categories=question_options.categories.viewkeys(),
+                           )
 
 
 @app.route('/set_options', methods=['get', 'post'])
 @logged_in
-@preconditions(choose_options, post_only, form_contains(''))  # TODO fill form_contains
+@preconditions(choose_options, post_only, form_contains(*question_options.fields.keys()))
 def set_options():
     # type: () -> Response
-    # TODO set user.options
+    options = get_user().options
+    # set user.options
+    for field in question_options.fields:
+        options.__dict__[field] = request.form[field]
     return reroute_to(answer_question)
 
 

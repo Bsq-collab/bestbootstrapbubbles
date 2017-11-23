@@ -2,7 +2,7 @@ import random
 from intbitset import intbitset
 from sqlite3 import IntegrityError
 
-from typing import Iterable, List, Tuple, Union, Set
+from typing import Iterable, List, Set, Tuple, Union
 
 from core.questions import Question, get_questions
 from core.songs import Song
@@ -86,8 +86,7 @@ class ListenUpDatabase(ApplicationDatabase):
     def _get_all_song_ids(self):
         # type: () -> intbitset
         """Get all song ids in DB."""
-        return intbitset(
-                x[0] for x in self.db.cursor.execute('SELECT id FROM songs').fetchall())
+        return intbitset(self.db.cursor.execute('SELECT id FROM songs').fetchall())
     
     # User stuff
     
@@ -202,6 +201,9 @@ class ListenUpDatabase(ApplicationDatabase):
         result = self.db.cursor.fetchone()  # type: Tuple[unicode, unicode, unicode, unicode, unicode, unicode, str]
         return Question.from_db(*result)
     
+    # FIXME needs to get question based on options
+    # FIXME so must query all the matching DB rows
+    # FIXME and then filter out already used ones
     def next_question(self, user):
         # type: (User) -> Question
         """Get next `Question` for `user` that `user` hasn't answered before."""
