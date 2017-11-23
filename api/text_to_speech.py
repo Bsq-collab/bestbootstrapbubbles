@@ -1,6 +1,6 @@
 from watson_developer_cloud import TextToSpeechV1 as TextToSpeech
 
-from core.secrets import watson
+from api.secrets import watson
 
 text_to_speech = TextToSpeech(username=watson.username, password=watson.password)
 

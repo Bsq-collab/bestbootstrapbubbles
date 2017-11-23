@@ -104,4 +104,4 @@ ENV/
 
 .idea/
 
-*secrets*
+secrets.json
