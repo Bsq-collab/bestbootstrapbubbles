@@ -3,6 +3,7 @@ from intbitset import intbitset
 from typing import Any, Dict, Iterable, Tuple
 
 from core.questions import Question
+from core.songs import Song
 from util.annotations import override
 from util.namedtuple_factory import register_namedtuple
 from util.tupleable import Tupleable
@@ -29,6 +30,9 @@ class User(Tupleable):
     :ivar questions set of question ids the user has already answered
     :type intbitset
     
+    :ivar songs set of song ids the user has already answered
+    :type intbitset
+    
     The above fields are persisted in the DB.
     The below fields are per game and are only persisted in the HTTP session game.
     
@@ -48,13 +52,14 @@ class User(Tupleable):
     
     DEFAULT_WINNING_POINTS = 5
     
-    def __init__(self, id, username, points, questions,
+    def __init__(self, id, username, points, questions, songs,
                  last_question_id=None, starting_points=None, winning_points=None, options=None):
-        # type: (int, unicode, int, intbitset, int, int, int, Dict[str, Any]) -> None
+        # type: (int, unicode, int, intbitset, intbitset, int, int, int, Dict[str, Any]) -> None
         self.id = id
         self.username = username
         self.points = points
         self.question = questions
+        self.songs = songs
         
         self.last_question_id = last_question_id
         
@@ -77,26 +82,47 @@ class User(Tupleable):
     
     @override
     def as_tuple(self):
-        # type: () -> Tuple[int, unicode, int, intbitset, int, int, int, Dict[str, Any]]
-        return self.id, self.username, self.points, self.question, \
+        # type: () -> Tuple[int, unicode, int, intbitset, intbitset, int, int, int, Dict[str, Any]]
+        return self.id, self.username, self.points, self.question, self.songs, \
                self.last_question_id, self.starting_points, self.winning_points, self.options
     
+    @staticmethod
+    def _deserialize_intbitset(buf):
+        # type: (buffer) -> intbitset
+        ints = intbitset()
+        ints.fastload(str(buf))
+        return ints
+    
+    @staticmethod
+    def _serialize_intbitset(ints):
+        # type: (intbitset) -> buffer
+        return buffer(ints.fastdump())
+    
     @classmethod
-    def from_db(cls, id, username, points, questions_buf):
+    def from_db(cls, id, username, points, questions_buf, songs_buf):
         # type: (int, unicode, int, buffer) -> User
-        questions_set = intbitset()
-        questions_set.fastload(str(questions_buf))
-        return cls(id, username, points, questions_set)
+        return cls(id, username, points,
+                   cls._deserialize_intbitset(questions_buf),
+                   cls._deserialize_intbitset(songs_buf))
     
     def serialize_questions(self):
         # type: () -> buffer
-        return buffer(self.question.fastdump())
+        return self._serialize_intbitset(self.questions)
+    
+    def serialize_songs(self):
+        # type: () -> buffer
+        return self._serialize_intbitset(self.songs)
     
     def complete_question(self, question):
         # type: (Question) -> None
         """Complete `question` for self, incrementing points and questions."""
         self.points += 1
         self.question.add(question.id)
+    
+    def play_song(self, song):
+        # type: (Song) -> None
+        """Record that `song` was played for self, adding to songs."""
+        self.songs.add(song.id)
     
     def current_game_points(self):
         # type: () -> int

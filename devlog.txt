@@ -142,3 +142,18 @@ Modified ListenUpDatabase and Song to reflect new usage of musix API,
     but will be the unique song id returned by the API.
     The database will also now store the artist name, just in case it's needed.
 
+khyberS -- 2017-11-23 02:54:00
+User now also stores the set of song ids (User.songs) previously played by that user,
+    just like it does for question ids.
+ListenUpDatabase.next_song() now returns the next (i.e. new and unique) random song.
+    If record=True is passed as an arg, then ListenUpDatabase.play_song() is called,
+    which records the user playing that song in the DB.
+    However, to get the next random song performantly
+    (which is tough b/c the song ids are API ids and are sparse),
+    a running set of song_ids in the DB has to be kept (ListenUpDatabase._song_ids).
+ListenUpDatabase.add_questions() now ensures that inserted songs are completely new and unique.
+    Just like ListenUpDatabase.next_song(), to do this performantly,
+    a running set of questions in the DB has to be kept (ListenUpDatabase._questions).
+    This is implemented in the method ListenUpDatabase._add_new_questions(),
+    which keeps querying new questions from the trivia API to replace any duplicates found.
+

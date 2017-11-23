@@ -101,7 +101,7 @@ def answer_question():
     """Display a User's home page with all of his edited and unedited Stories."""
     user = get_user()
     if user.has_won():
-        return render_template('won.jinja2', user=user, song=db.random_song())
+        return render_template('congrats.jinja2', user=user, song=db.next_song(user, record=True))
     else:
         with db:
             return render_template('questions.jinja2',
