@@ -17,4 +17,4 @@ def mkdir_if_not_exists(dir_path):
 def sanitize_filename(filename):
     # type: (AnyStr) -> str
     # TODO
-    pass
+    return filename

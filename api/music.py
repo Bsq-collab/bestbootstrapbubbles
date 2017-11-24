@@ -21,8 +21,10 @@ def get_song(num_songs, song, country, key=musix.api_key):
         'f_is_explicit': '0',
     }
     
-    data = requests.get('https://api.musixmatch.com/ws/1.1/chart.tracks.get', params=payload)\
-        .json()['message']['body']['track_list'][song]['track']  # type: Json
+    response = requests.get('https://api.musixmatch.com/ws/1.1/chart.tracks.get', params=payload)\
+        .json()  # type: Json
+    
+    data = response['message']['body']['track_list'][0]['track']  # type: Json
     id = data['track_id']
     return id, data['artist_name'], data['track_name'], get_lyrics(id, key)
 
@@ -35,8 +37,10 @@ def get_lyrics(id, key=musix.api_key):
         'format': 'json',
         'track_id': str(id),
     }
-    return requests.get('https://api.musixmatch.com/ws/1.1/track.lyrics.get', params=payload) \
+    lyrics = requests.get('https://api.musixmatch.com/ws/1.1/track.lyrics.get', params=payload) \
         .json()['message']['body']['lyrics']['lyrics_body']
+    end = lyrics.rfind('*' * 7, end=lyrics.rfind('*' * 7))
+    return lyrics[:end]
 
 
 # print get_song(5, "us", 1, 'INSERT_KEY_HERE')
@@ -45,4 +49,7 @@ def get_lyrics(id, key=musix.api_key):
 def random_song(key=musix.api_key):
     # type: () -> Tuple[int, unicode, unicode, unicode]
     """Get name and lyrics of a random song."""
-    return get_song(5, 'us', key)
+    # 'Havana' is temporary
+    # FIXME Why do we have to specify the song to get.
+    # FIXME I thought it's just supposed to return the top 5 or a random song or something.
+    return get_song(num_songs=5, song='Havana', country='us', key=key)

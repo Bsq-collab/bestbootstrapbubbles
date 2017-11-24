@@ -165,3 +165,13 @@ Finished QuestionOptions class for User.options field,
 khyberS -- 2017-11-24 09:47:46
 Added directions to get an API key for Watson Text to Speech to the README.md.
 
+khyberS -- 2017-11-24 16:00:12
+Tested ListenUpDatabase.new_song(), which tests getting a new song and downloading the audio.
+    Fixed the bugs so that it now works, except I had to hardcode the name of the song.
+    The name of the song shouldn't be hardcoded anywhere,
+    and if it's a parameter, where are we getting the song names from.
+    Shouldn't the functions in music.py just return the top N songs
+    or return a random song or something?
+Added User.set_options(), which sets the user's QuestionOptions
+    from a dictionary with the same field names, which can just be request.form.
+

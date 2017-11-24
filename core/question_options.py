@@ -85,6 +85,12 @@ class QuestionOptions(Tupleable):
         # type: () -> QuestionOptions
         return cls._make(converter.keys()[0] for converter in fields.viewvalues())
     
+    def set_options(self, options):
+        # type: (Dict[str, str]) -> None
+        """Set fields from dict where keys are field names."""
+        for field in fields:
+            self.__dict__[field] = options[field]
+    
     def urlencode(self):
         # type: () -> str
         """Convert to query string."""

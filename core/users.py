@@ -134,3 +134,9 @@ class User(Tupleable):
         # type: () -> bool
         """Check if user has won game yet."""
         return self.current_game_points() > self.winning_points
+    
+    def set_options(self, options):
+        # type: (Dict[str, str]) -> None
+        """Set fields from dict where keys are `QuestionOptions`'s field names."""
+        self.options.set_options(options)
+    

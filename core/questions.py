@@ -43,6 +43,7 @@ class Question(Tupleable, AudioDownloader):
     
     def __init__(self, id, question, answer, choices, type, difficulty, category, audio_path=None):
         # type: (int, unicode, unicode, List[unicode], unicode, unicode, unicode, str) -> None
+        super(Question, self).__init__(audio_path)
         self.id = id
         self.question = question
         self.answer = answer
@@ -50,7 +51,6 @@ class Question(Tupleable, AudioDownloader):
         self.type = type
         self.difficulty = difficulty
         self.category = category
-        self.audio_path = audio_path
     
     @classmethod
     def _make(cls, fields):

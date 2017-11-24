@@ -144,10 +144,7 @@ def choose_options():
 @preconditions(choose_options, post_only, form_contains(*question_options.fields.keys()))
 def set_options():
     # type: () -> Response
-    options = get_user().options
-    # set user.options
-    for field in question_options.fields:
-        options.__dict__[field] = request.form[field]
+    get_user().set_options(request.form)
     return reroute_to(answer_question)
 
 

@@ -232,8 +232,9 @@ class ListenUpDatabase(ApplicationDatabase):
     def _insert_song(self, song):
         # type: (Song) -> bool
         """Insert `song` into DB and return true if it is a new, unique song and was inserted."""
+        self.db.cursor.execute('INSERT INTO songs VALUES (?, ?, ?, ?, ?)', song.as_tuple())
         try:
-            self.db.cursor.execute('INSERT INTO songs VALUES (?, ?, ?, ?)', song.as_tuple())
+            pass
         except IntegrityError:
             return False
         self.commit()
@@ -245,15 +246,19 @@ class ListenUpDatabase(ApplicationDatabase):
         Get the next random `Song` in the DB that `user` hasn't heard yet.
         If `record`, call play_song() for the song and `user`.
         """
-        new_song_ids = self._song_ids & user.songs
-        song_id = new_song_ids[random.randrange(0, len(new_song_ids))]
-        self.db.cursor.execute(
-                'SELECT name, artist, lyrics, audio_path FROM songs '
-                'LIMIT 1 ORDER BY RANDOM()'
-        )
-        result = self.db.cursor.fetchone()  # type: Tuple[unicode, unicode, unicode, str]
-        name, artist, lyrics, audio_path = result
-        song = Song(song_id, artist, name, lyrics, audio_path)
+        new_song_ids = self._song_ids & user.songs  # type: intbitset
+        if len(new_song_ids) == 0:
+            song = self.new_song()
+        else:
+            song_id = new_song_ids[random.randrange(0, len(new_song_ids))]
+            self.db.cursor.execute(
+                    'SELECT name, artist, lyrics, audio_path FROM songs '
+                    'LIMIT 1 ORDER BY RANDOM()'
+            )
+            result = self.db.cursor.fetchone()  # type: Tuple[unicode, unicode, unicode, str]
+            name, artist, lyrics, audio_path = result
+            song = Song(song_id, artist, name, lyrics, audio_path)
+        
         if record:
             self.play_song(user, song)
         return song

@@ -32,11 +32,11 @@ class Song(Tupleable, AudioDownloader):
     
     def __init__(self, id, artist, name, lyrics, audio_path=None):
         # type: (int, unicode, unicode, unicode, str) -> None
+        super(Song, self).__init__(audio_path)
         self.id = id
         self.artist = artist
         self.name = name
         self.lyrics = lyrics
-        self.audio_path = audio_path
     
     @classmethod
     def _make(cls, fields):
@@ -60,7 +60,7 @@ class Song(Tupleable, AudioDownloader):
     def filename(self):
         # type: () -> str
         """Create filename used for saving audio file."""
-        return '{}. {}'.format(self.id, io.sanitize_filename(self.name))
+        return '{} - {}'.format(self.id, io.sanitize_filename(self.name))
     
     def bleeped_lyrics(self):
         # type: () -> unicode
@@ -72,13 +72,13 @@ class Song(Tupleable, AudioDownloader):
             'bitch': 'beep',
             'damn': 'dang',
             'cocaine': 'coca-cola',
-            '...\n\n******* this lyrics is not for commercial use *******\n(1409616514838)': '',
             '\n': ' '
         }
     
         lyrics = self.lyrics.lower()
-        for replacing, replacement in replacements.viewvalues():
+        for replacing, replacement in replacements.viewitems():
             lyrics = lyrics.replace(replacing, replacement)
+        
         return lyrics
     
     @override
