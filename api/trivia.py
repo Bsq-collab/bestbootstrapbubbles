@@ -1,4 +1,5 @@
-import requests
+#!usr/bin/python
+import requests, json, sqlite3
 
 '''
 This will return a list of dictionaries of questions in this format
@@ -15,10 +16,25 @@ int category - *see bottom of file for corresponding categories
 int difficulty - 1:easy, 2:med, 3:hard
 '''
 
+def get_write_data(amount, typing=0, category=0, difficulty=0):
+    data = get_questions(amount, typing=0, category=0, difficulty=0)
+    db_name = "../data/listen_up.db"
+    dab = sqlite3.connect(db_name)
+    c = dab.cursor()
+    #cmd = "SELECT id FROM Stories ORDER BY id DESC"
+    for item in data:
+        cmd = "SELECT question FROM questions WHERE question = "+item["question"]
+        c.execute(cmd)
+        if (cmd!=""):
+            print "A clone."
+        
+    return data
+
+
 
 def get_questions(amount, typing=0, category=0, difficulty=0):
     querystr = query_help(amount, typing, category, difficulty)
-    # print querystr
+    #debug print querystr
     source = "https://opentdb.com/api.php?" + querystr
     datastuff = requests.get(source)
     datastuff = datastuff.json()
@@ -41,6 +57,7 @@ def query_help(amount, typing, category, difficulty):
     if difficulty != 0: retstring += "&difficulty=" + diffarr[difficulty]
     return retstring
 
+get_write_witcha(3,0,9,2)
 
 '''
 Corresponding Categories 
