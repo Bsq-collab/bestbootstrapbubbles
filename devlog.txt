@@ -165,6 +165,9 @@ Finished QuestionOptions class for User.options field,
 khyberS -- 2017-11-24 09:47:46
 Added directions to get an API key for Watson Text to Speech to the README.md.
 
+naotakaK -- 2017-11-24 13:20:37
+Added key procurement steps for musixmatch to README.md
+
 khyberS -- 2017-11-24 16:00:12
 Tested ListenUpDatabase.new_song(), which tests getting a new song and downloading the audio.
     Fixed the bugs so that it now works, except I had to hardcode the name of the song.
