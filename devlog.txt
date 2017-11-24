@@ -194,3 +194,6 @@ Fixed QuestionOptions.urlencode(), which returns the query string of the options
 bayanB -- 2017-11-24 16:57:44
 Added customize.html again, I can't seem to find the old one I wrote. Customizes by type category and difficulty,has to be rendered in app.py
 
+bayanB -- 2017-11-24 17:20:08
+Changed the design doc to reflect our changes
+

@@ -1,0 +1,37 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <title>
+      Customize
+    </title>
+  </head>
+  Now that you've answered 5 questions correctly, you can customize the types of questions you'll get.
+<br>
+  <form>
+    Difficulty:
+    <select name="difficulty" size=3>
+      <option selected>Default</option>
+      {% for each in difficulty %}
+      <option> {{ each }}</option>
+      {% endfor %}
+    </select>
+    <br>
+    Type:
+    <select name="type" size=3>
+      <option selected>Default</option>
+      {% for each in type %}
+      <option> {{ each }}</option>
+      {% endfor %}
+    </select>
+    <br>
+    Category:
+    <select name="category" size=3>
+      <option selected>Default</option>
+      {% for each in category %}
+      <option> {{ each }}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" name="done" value="done">
+  </form>
+</body>
+</html>
