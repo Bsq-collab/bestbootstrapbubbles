@@ -60,3 +60,4 @@ After installing the dependencies, run:
 `$ python app.py`
 
 Then, in a browser, go to the website at [http://localhost:5000/](http://localhost:5000/) and follow the directions.
+(Don't use Internet Explorer.  Audio might not play at all.)
