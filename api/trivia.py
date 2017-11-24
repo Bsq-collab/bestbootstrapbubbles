@@ -1,5 +1,6 @@
 #!usr/bin/python
 import requests, json, sqlite3
+from HTMLParser import HTMLParser
 
 '''
 This will return a list of dictionaries of questions in this format
@@ -16,29 +17,52 @@ int category - *see bottom of file for corresponding categories
 int difficulty - 1:easy, 2:med, 3:hard
 '''
 
-def get_write_data(amount, typing=0, category=0, difficulty=0):
+def get_write_witcha(amount, typing=0, category=0, difficulty=0):
     data = get_questions(amount, typing=0, category=0, difficulty=0)
     db_name = "../data/listen_up.db"
     dab = sqlite3.connect(db_name)
     c = dab.cursor()
-    #cmd = "SELECT id FROM Stories ORDER BY id DESC"
     for item in data:
-        cmd = "SELECT question FROM questions WHERE question = "+item["question"]
+        #print item        
+        cmd = """SELECT question FROM questions WHERE question = "%s" """%(item["question"])
+        #print cmd
         c.execute(cmd)
-        if (cmd!=""):
-            print "A clone."
-        
+        story = c.fetchone()
+        if story == None:        
+            cmd = "SELECT MAX(id) FROM questions"
+            c.execute(cmd)
+            maxval = c.fetchone()[0]
+            #print maxval
+            cmd = "INSERT INTO question values("
+            print "theres nothing here"
+        else:
+            print "you screwed up"
     return data
 
 
 
 def get_questions(amount, typing=0, category=0, difficulty=0):
     querystr = query_help(amount, typing, category, difficulty)
-    #debug print querystr
     source = "https://opentdb.com/api.php?" + querystr
     datastuff = requests.get(source)
     datastuff = datastuff.json()
+    #Ew HTML Encoding
+    h = HTMLParser()
     results = datastuff["results"]
+    for item in results:
+        keys = item.keys()
+        for key in keys:
+            item[key] = h.unescape(item[key])
+            try:
+                item[key] = item[key].replace("\"","'")
+            except(Exception):
+                '''
+                print item["question"]
+                print item["correct_answer"]
+                print item["incorrect_answers"]
+                '''
+                pass
+    #print results
     return results
 
 
