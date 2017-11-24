@@ -48,10 +48,10 @@ class Song(Tupleable, AudioDownloader):
         return self.id, self.artist, self.name, self.lyrics, self.audio_path
     
     @classmethod
-    def random(cls, dir_path):
-        # type: (str) -> Song
-        """Create a random Song."""
-        id, artist, name, lyrics = music.random_song()
+    def get_song(cls, song_num, dir_path):
+        # type: (int, str) -> Song
+        """Get `song_num`th song in the Musixmatch rankings."""
+        id, artist, name, lyrics = music.get_song(song_num)
         song = cls(id, artist, name, lyrics)
         song.download_audio(dir_path)
         return song

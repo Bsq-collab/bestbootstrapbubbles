@@ -265,12 +265,18 @@ class ListenUpDatabase(ApplicationDatabase):
     
     def new_song(self):
         # type: () -> Song
-        """Get a random `Song` not int the DB.  Then insert it."""
-        # Keep getting new random songs until a new one is found.
+        """Get the next `Song` not in the DB.  Then insert it."""
+        # Keep getting next songs until a new one is found.
+        new_song_num = len(self._song_ids) + 1
         while True:
-            song = Song.random(self.songs_dir)
+            song = Song.get_song(new_song_num, self.songs_dir)
             if self._insert_song(song):
                 return song
+            # try next song if previous one already is in DB
+            # which may happen because song rankings will change over time
+            # TODO if this happens a lot, new_song_num will have to be maintained separately from
+            # TODO the number of songs already in DB, b/c they will be out of sync
+            new_song_num += 1
     
     def play_song(self, user, song):
         # type: (User, Song) -> None

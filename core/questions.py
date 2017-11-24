@@ -4,6 +4,7 @@ from typing import Any, Dict, Iterable, List, Tuple
 from api import text_to_speech, trivia
 from api.text_to_speech import AudioDownloader
 from core.question_options import QuestionOptions
+from util import io
 from util.annotations import override
 from util.namedtuple_factory import register_namedtuple
 from util.tupleable import Tupleable
@@ -90,7 +91,7 @@ class Question(Tupleable, AudioDownloader):
     def filename(self):
         # type: () -> str
         """Create filename used for saving audio file."""
-        return str(self.id)
+        return '{} - {}'.format(self.id, io.sanitize_filename(self.question))
     
     @override
     def text(self):

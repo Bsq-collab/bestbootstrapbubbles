@@ -178,3 +178,8 @@ Tested ListenUpDatabase.new_song(), which tests getting a new song and downloadi
 Added User.set_options(), which sets the user's QuestionOptions
     from a dictionary with the same field names, which can just be request.form.
 
+khyberS -- 2017-11-24 16:30:43
+Changed music.py so that get_song() returns the Nth song in rankings, where N = song_num.
+    Also changed Song.random() to Song.get_song() to reflect this change.
+    Also changed ListenUpDatabase.new_song() to reflect this change.
+

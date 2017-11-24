@@ -121,4 +121,5 @@ def query_help(amount, typing, category, difficulty):
     if difficulty != 0: retstring += "&difficulty=" + diffarr[difficulty]
     return retstring
 
-get_write_witcha(1,0,9,2)
+if __name__ == '__main__':
+    get_write_witcha(1,0,9,2)
