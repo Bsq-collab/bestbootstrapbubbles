@@ -9,6 +9,7 @@ from werkzeug.datastructures import ImmutableMultiDict
 
 from core import question_options
 from core.listen_up_db import ListenUpDatabase
+from core.question_options import InvalidQuestionOptionException
 from core.users import User
 from util.flask.flask_json import use_named_tuple_json
 from util.flask.flask_utils import form_contains, post_only, preconditions, reroute_to, \
@@ -144,7 +145,11 @@ def choose_options():
 @preconditions(choose_options, post_only, form_contains(*question_options.fields.keys()))
 def set_options():
     # type: () -> Response
-    get_user().set_options(request.form)
+    try:
+        get_user().set_options(request.form)
+    except InvalidQuestionOptionException as e:
+        flash(e.message)
+        return reroute_to(choose_options)
     return reroute_to(answer_question)
 
 

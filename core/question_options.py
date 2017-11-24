@@ -7,8 +7,8 @@ from util.namedtuple_factory import register_namedtuple
 from util.tupleable import Tupleable
 
 types = OrderedDict((
-        ('Multiple Choice', 'multiple'),
-        ('True or False', 'boolean'),
+    ('Multiple Choice', 'multiple'),
+    ('True or False', 'boolean'),
 ))  # type: Dict[str, str]
 
 difficulties = OrderedDict((
@@ -49,6 +49,10 @@ fields = OrderedDict((
 ))  # type: Dict[str, Dict[str, Union[str, int]]]
 
 
+class InvalidQuestionOptionException(Exception):
+    pass
+
+
 @register_namedtuple
 class QuestionOptions(Tupleable):
     """
@@ -83,20 +87,42 @@ class QuestionOptions(Tupleable):
     @classmethod
     def default(cls):
         # type: () -> QuestionOptions
-        return cls._make(converter.keys()[0] for converter in fields.viewvalues())
+        return cls(None, None, None)
     
     def set_options(self, options):
         # type: (Dict[str, str]) -> None
-        """Set fields from dict where keys are field names."""
+        """
+        Set fields from dict where keys are field names.
+        If field value is None or '' or any False coerced value, it's skipped entirely.
+        """
+        
+        # Check if valid options
+        for field, converter in fields.viewitems():
+            value = options[field]
+            if value and value not in converter:
+                raise InvalidQuestionOptionException(
+                    '"{}" is not a valid {}.'.format(value, field))
+            
+        # Now set options for real
         for field in fields:
-            self.__dict__[field] = options[field]
+            value = options[field]
+            if value:
+                self.__dict__[field] = value
+    
+    def _yield_query_string(self):
+        # type: () -> Iterable[str]
+        """
+        Yield name=value query string pairs,
+        s.t. a None or '' value is skipped entirely, so default value will be used instead."""
+        for field, converter in fields.viewitems():
+            value = converter[self.__dict__[field]]
+            if value:  # not None or not ''
+                yield '{}={}'.format(field, value)
     
     def urlencode(self):
         # type: () -> str
         """Convert to query string."""
-        return '&'.join(
-                '{}={}'.format(field, converter[self.__dict__[field]])
-                for field, converter in fields.viewvalues())
+        return '&'.join(self._yield_query_string())
 
 
 def check_fields():
@@ -106,3 +132,6 @@ def check_fields():
 
 # assert that fields in `fields` are same as fields in QuestionOptions
 check_fields()
+
+if __name__ == '__main__':
+    print QuestionOptions('Multiple Choice', 'Hard', 'General Knowledge').urlencode()

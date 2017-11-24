@@ -183,3 +183,11 @@ Changed music.py so that get_song() returns the Nth song in rankings, where N = 
     Also changed Song.random() to Song.get_song() to reflect this change.
     Also changed ListenUpDatabase.new_song() to reflect this change.
 
+khyberS -- 2017-11-24 16:44:54
+Fixed QuestionOptions.set_options() so that it throws an InvalidQuestionOptionException
+    if any of the user-supplied options aren't valid.
+    Added unfinished code in set_options() route to handle this.
+Fixed QuestionOptions.urlencode(), which returns the query string of the options,
+    so that if any option is None or '', then it is skipped in the query string,
+    so that the API will use the default value.
+
