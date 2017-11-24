@@ -165,3 +165,6 @@ Finished QuestionOptions class for User.options field,
 khyberS -- 2017-11-24 09:47:46
 Added directions to get an API key for Watson Text to Speech to the README.md.
 
+naotakaK -- 2017-11-24 13:20:37
+Added key procurement steps for musixmatch to README.md
+

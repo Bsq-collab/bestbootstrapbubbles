@@ -35,7 +35,12 @@ First make a copy of 'secrets_template.json' named 'secrets.json' in the api dir
 
 * ##### Musixmatch
 
-    1. 
+    1. Go to [developer.musixmatch.com](https://developer.musixmatch.com/).
+    2. Sign up for a developer account.
+    3. Confirm your account through email and click 'Plans'.
+    4. Click 'Get Started' under the 'Free' option.
+    5. Fill out the required information to get your API key.
+    6. The key should now be listed under 'Applications' within your account overview, accessible by clicking your username at the top right.
 
 ### Dependencies and how to install them
 These are listed in requirements.txt:
