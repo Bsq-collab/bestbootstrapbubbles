@@ -12,13 +12,35 @@ Listen Up is a game which uses the Watson Text to Speech API, Open_Trivia API, a
 
 #### How to procure API Keys
 
-##### Watson Text to Speech
-##### Open_Trivia
-##### Musixmatch
+First make a copy of 'secrets_template.json' named 'secrets.json' in the api directory.
 
-#### How to run Listen Up
- 
-` $ python app.py `
+* ##### Watson Text to Speech
+
+    1. Go to [Watson Text to Speech](https://www.ibm.com/watson/services/text-to-speech/).
+    2. Click 'Get started free'.
+    3. Fill out the form to create an account.
+    4. Open the link in the email sent by The Bluemix Team to activate your account.
+    5. Sign into your new account.
+    6. You should now be at [https://console.bluemix.net/catalog/services/text-to-speech/](https://console.bluemix.net/catalog/services/text-to-speech/).
+        If not, click on that link.
+    7. Click 'Create'.
+    8. Click on 'Service Credentials'.
+    9. Click on 'New credential' and then 'Add' in the pop-up to create your credentials.
+    10. Click 'View credentials' in the new credential that just appeared.
+    11. Copy the username and password into the fields under 'watson_text_to_speech' in 'secrets.json'.
+
+* ##### Open_Trivia
+
+    No API keys needed
+
+* ##### Musixmatch
+
+    1. Go to [developer.musixmatch.com](https://developer.musixmatch.com/).
+    2. Sign up for a developer account.
+    3. Confirm your account through email and click 'Plans'.
+    4. Click 'Get Started' under the 'Free' option.
+    5. Fill out the required information to get your API key.
+    6. The key should now be listed under 'Applications' within your account overview, accessible by clicking your username at the top right.
 
 ### Dependencies and how to install them
 These are listed in requirements.txt:
@@ -36,5 +58,11 @@ In order to install all dependencies, run this line:
 
 ` $ pip install -r requirements.txt `
 
+### How to run Listen Up
 
+After installing the dependencies, run:
+ 
+`$ python app.py`
 
+Then, in a browser, go to the website at [http://localhost:5000/](http://localhost:5000/) and follow the directions.
+(Don't use Internet Explorer.  Audio might not play at all.)
