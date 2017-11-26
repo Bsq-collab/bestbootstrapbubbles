@@ -1,8 +1,14 @@
 <html>
   <head>
-    <title></title>
+    <title>Questions</title>
+     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   </head>
   <body>
+    <center>
     Question: {{ question.question }}
     <br>
     Answer choices:
@@ -11,9 +17,13 @@
     {{ element }}
 
     {% endfor %}
+    </center>
+    <br>
     <form>
-      <input type="text" name="input" text="answer">
-      <input type="submit" name="done" value="done">
+      <div class="form-group">
+        <label for="answer">Your Answer Here:</label>
+        <input type="text" class="form-control" id="answer" name="input" text="Answer">
+      <button type="submit" class="btn btn-primary" name="done" value="done">Submit </button>
     </form>
   </body>
 </html>
