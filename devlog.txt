@@ -197,3 +197,6 @@ Added customize.html again, I can't seem to find the old one I wrote. Customizes
 bayanB -- 2017-11-24 17:20:08
 Changed the design doc to reflect our changes
 
+bayanB -- 2017-11-25 23:03:14
+Added bootstrap styling to all templates
+

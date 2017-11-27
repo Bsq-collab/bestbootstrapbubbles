@@ -2,21 +2,34 @@
 <html>
   <head>
     <title> Login </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   </head>
 
   <body>
-    <form action="/check_login" method="GET">
+    <form action="/check_login" method="GET" class="form-group">
       
       {{msg}}
 </font>
 
 <br>
-Username: <input type="text" name="username" required>
+<div class="form-group">
+  <label for="username">Username:</label>
+  <input type="text" class="form-control" id="username" name="username" required>
+  <br>
+</div>
+<div class="form-group">
+  <label for="password">Password:</label>
+  <input type="password" class="form-control" id="password" name="password" required>
+  <br>
+</div>
+
+<button type="submit" class="btn btn-primary"> Sign in </button>
 <br>
-Password: <input type="password" name="password" required>
-<br>
-<input type="submit">
-Need an account <a href= "/register"> Register </a>
+Need an account: <a href= "/register"> Register </a>
 </form>
 </body>
 </html>
