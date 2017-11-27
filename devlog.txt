@@ -200,3 +200,6 @@ Changed the design doc to reflect our changes
 bayanB -- 2017-11-25 23:03:14
 Added bootstrap styling to all templates
 
+brianL -- 2017-11-27 13:16:50
+added fire emojis to readme
+

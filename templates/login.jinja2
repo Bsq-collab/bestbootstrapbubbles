@@ -10,7 +10,7 @@
   </head>
 
   <body>
-    <form action="/check_login" method="GET" class="form-group">
+    <form action="/auth" method="POST" class="form-group">
       
       {{msg}}
 </font>
@@ -27,9 +27,9 @@
   <br>
 </div>
 
-<button type="submit" class="btn btn-primary"> Sign in </button>
+<button type="submit" class="btn btn-primary" value="done"> Sign in </button>
 <br>
-Need an account: <a href= "/register"> Register </a>
+Need an account: <a href= "/signup"> Register </a>
 </form>
 </body>
 </html>
