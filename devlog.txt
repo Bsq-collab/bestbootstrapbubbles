@@ -203,3 +203,6 @@ Added bootstrap styling to all templates
 brianL -- 2017-11-27 13:16:50
 added fire emojis to readme
 
+brianL -- 2017-11-27 13:19:51
+debugging app.py in progress
+
