@@ -17,7 +17,7 @@ from util.flask.flask_utils import form_contains, post_only, preconditions, rero
 from util.flask.flask_utils_types import Precondition, Router
 from util.flask.template_context import add_template_context
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates')
 
 db = ListenUpDatabase()
 
