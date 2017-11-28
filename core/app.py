@@ -98,6 +98,15 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/register')
+def register():
+    # type: () -> Response
+    """Render the page for registering a new account."""
+    if is_logged_in():
+        return reroute_to(answer_question)
+    return render_template('signup.html')
+
+
 @preconditions(login, post_only, form_contains('username', 'password'))
 def auth_or_signup(db_user_supplier):
     # type: (Callable[[unicode, unicode], User]) -> Response

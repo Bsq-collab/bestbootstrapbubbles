@@ -99,15 +99,16 @@ class QuestionOptions(Tupleable):
         # Check if valid options
         for field, converter in fields.viewitems():
             value = options[field]
-            if value and value not in converter:
+            if value and value not in converter and value != 'Default':
                 raise InvalidQuestionOptionException(
                     '"{}" is not a valid {}.'.format(value, field))
             
         # Now set options for real
         for field in fields:
             value = options[field]
-            if value:
-                self.__dict__[field] = value
+            if value == 'Default':
+                value = None
+            self.__dict__[field] = value
     
     def _yield_query_string(self):
         # type: () -> Iterable[str]

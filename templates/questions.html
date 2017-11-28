@@ -10,17 +10,7 @@
     Your browser does not support the audio tag for wav files.
   </audio>
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      {{ br(3) }}
-      {% for message in messages %}
-        <h2>{{ message }}</h2>
-      {% endfor %}
-      {{ br(2) }}
-    {% else %}
-      {{ br(3) }}
-    {% endif %}
-  {% endwith %}
+  {% include "flash.html" %}
 
   Question: {{ question.question }}
   {{ br(1) }}

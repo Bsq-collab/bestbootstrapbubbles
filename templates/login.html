@@ -8,8 +8,7 @@
   <!--suppress HtmlUnknownTarget -->
   <form action="/auth" method="post" class="form-group">
 
-    {# FIXME what's this msg#}
-    {{ msg }}
+    {% include "flash.html" %}
 
     {{ br(1) }}
     <div class="form-group">

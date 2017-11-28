@@ -212,3 +212,6 @@ The links to signup and login appear to work now. Now for the questions...
 khyberS -- 2017-11-28 03:10:56
 Made almost everything work.  Just a few bugs and style stuff left I think.
 
+khyberS -- 2017-11-28 15:21:06
+Fixed register() route and signup.html.  Uses JS to check matching passwords.
+
