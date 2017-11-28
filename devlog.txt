@@ -200,6 +200,15 @@ Changed the design doc to reflect our changes
 bayanB -- 2017-11-25 23:03:14
 Added bootstrap styling to all templates
 
+brianL -- 2017-11-27 13:16:50
+added fire emojis to readme
+
+brianL -- 2017-11-27 13:19:51
+debugging app.py in progress
+
+brianL -- 2017-11-28 01:25:48
+The links to signup and login appear to work now. Now for the questions...
+
 khyberS -- 2017-11-28 03:10:56
 Made almost everything work.  Just a few bugs and style stuff left I think.
 
