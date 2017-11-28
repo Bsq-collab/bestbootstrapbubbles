@@ -126,16 +126,25 @@ def auth_or_signup(db_user_supplier):
             flash(e.message)
             print(e, file=stderr)
             return reroute_to(login)
-    
     set_user(user)
     return reroute_to(answer_question)
 
 
-@app.route('/signup', methods=['get', 'post'])
+@app.route('/signup', methods= ['get', 'post'])
 def signup():
     # type: () -> Response
     """Add the user to the database and log them in."""
-    return auth_or_signup(db.add_user)
+    return render_template("signup.html")
+    #return auth_or_signup(db.add_user)
+
+@app.route('/check_register', methods= ['post'])
+def check_reg():
+    if request.args.get("password1") == request.args.get("password2"):
+        db.add_user(request.args.get("username"), request.args.get("password1"))
+    else:
+        
+    return 
+
 
 
 """Precondition decorator rerouting to login if is_logged_in isn't True."""
