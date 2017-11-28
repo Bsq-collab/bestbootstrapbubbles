@@ -3,6 +3,7 @@ from __future__ import print_function
 import sys
 
 from flask import Flask
+from markupsafe import Markup
 from typing import Any, Dict
 
 Attrs = Dict[str, Any]
@@ -50,14 +51,14 @@ def repeat(s, n):
 
 
 def br(n):
-    # type: (int) -> str
+    # type: (int) -> Markup
     """
     Concisely create many <br> tags.
 
     :param n: number of <br> to retur
     :return: n <br> tags
     """
-    return repeat('<br>', n)
+    return Markup(repeat('<br>', n))
 
 
 # remove hiddens

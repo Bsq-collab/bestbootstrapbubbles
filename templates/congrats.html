@@ -1,19 +1,26 @@
-<!DOCTYPE.html>
-<html>
-  <head>
-    <title>Winner!</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends "base.html" %}
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-  </head>
-  <body>
-    <center><h1> WOOOO!!! Congrats {{ user.username }}</h1></center>
-    Now that you've completed {{ user.winning_points }} number of questions correctly,
-    you can choose which questions you'd like to play <a href="/customize"> here</a>
-    <br>
+{% block title %}
+  - Congrats
+{% endblock %}
 
-   <button type="button" class="btn btn-link"> <a href="/logout">Logout</a></button>
-  </body>
-</html>
+{% block body %}
+  <audio controls autoplay>
+    <source src="{{ song.audio_path }}">
+    Your browser does not support the audio tag for wav files.
+  </audio>
+  {{ br(3) }}
+  <h1> WOOOO!!! Congrats {{ user.username }}</h1>
+  Now that you've completed {{ user.winning_points }} number of questions correctly,
+  you get to listen to {{ song.name }} by {{ song.artist }},
+  and you can choose which questions you'd like to play
+  <!--suppress HtmlUnknownTarget -->
+  <a href="/choose_options"> here</a>.
+  {{ br(2) }}
+
+  <button type="button" class="btn btn-link">
+    <!--suppress HtmlUnknownTarget -->
+    <a href="/logout">Logout</a>
+  </button>
+
+{% endblock %}

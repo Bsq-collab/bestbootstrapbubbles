@@ -1,53 +1,58 @@
-<!DOCTYPE>
-<html>
-  <head>
-    <title>Customize </title>
-     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends "base.html" %}
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-  </head>
-  <center><h2>Customize</h2><br>
+{% block title %}
+  - Customize
+{% endblock %}
 
-  <p>Now that you've answered 5 questions correctly, you can customize the types of questions you'll get.</p></center>
-  <br>
+{% block body %}
+  {{ br(1) }}
+  <h2>Customize</h2>
+  {{ br(1) }}
+
+  <p>
+    Now that you've answered 5 questions correctly, you can customize the types of questions
+    you'll get.
+  </p>
+  {{ br(1) }}
   <div class="mx-auto" style="width: 200px;">
-    <form>
+    <!--suppress HtmlUnknownTarget -->
+    <form action="/set_options" method="post" id="options">
       <div class="form-group">
-        <label for="difficulty"> Difficulty:</label><br>
-        <select class="form-control" id="difficulty">
+        <label for="difficulty"> Difficulty:</label>
+        {{ br(1) }}
+        <select class="form-control" id="difficulty" name="difficulty">
           <option selected>Default</option>
-          {% for each in difficulty %}
-          <option> {{ each }}</option>
+          {% for difficulty in difficulties %}
+            <option> {{ difficulty }}</option>
           {% endfor %}
         </select>
-        <br>
       </div>
-
+      {{ br(1) }}
       <div class="form-group">
-        <label for="type">Type:</label><br>
-        <select class="form-control" id="type">
+        <label for="type">Type:</label>
+        {{ br(1) }}
+        <select class="form-control" id="type" name="type">
           <option selected>Default</option>
-          {% for each in type %}
-          <option> {{ each }}</option>
+          {% for type in types %}
+            <option> {{ type }}</option>
           {% endfor %}
         </select>
-        <br>
       </div>
-      
+      {{ br(1) }}
       <div class="form-group">
-        <label for="category">Category:</label><br>
-        <select class="form-control" id="category">
+        <label for="category">Category:</label>
+        {{ br(1) }}
+        <select class="form-control" id="category" name="category">
           <option selected>Default</option>
-          {% for each in category %}
-          <option> {{ each }}</option>
+          {% for category in categories %}
+            <option> {{ category }}</option>
           {% endfor %}
-        </select> <br>
+        </select>
       </div>
-      
-    <button type="submit" class="btn btn-primary" name="done" value="Done"> Customize! </button>
-  </form>
+      {{ br(1) }}
+      <button type="submit" class="btn btn-primary" name="done" value="Done" form="options">
+        Customize!
+      </button>
+    </form>
   </div>
-</body>	
-</html>
+{% endblock %}

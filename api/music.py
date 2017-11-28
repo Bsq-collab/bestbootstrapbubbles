@@ -38,6 +38,6 @@ def get_lyrics(id, key=musix.api_key):
         'track_id': id,
     }
     lyrics = requests.get('https://api.musixmatch.com/ws/1.1/track.lyrics.get', params=payload) \
-        .json()['message']['body']['lyrics']['lyrics_body']
-    end = lyrics.rfind('*' * 7, end=lyrics.rfind('*' * 7))
+        .json()['message']['body']['lyrics']['lyrics_body']  # type: unicode
+    end = lyrics.rfind('*' * 7, 0, lyrics.rfind('*' * 7))
     return lyrics[:end]

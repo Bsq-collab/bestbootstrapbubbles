@@ -115,7 +115,7 @@ class QuestionOptions(Tupleable):
         Yield name=value query string pairs,
         s.t. a None or '' value is skipped entirely, so default value will be used instead."""
         for field, converter in fields.viewitems():
-            value = converter[self.__dict__[field]]
+            value = converter.get(self.__dict__[field], None)
             if value:  # not None or not ''
                 yield '{}={}'.format(field, value)
     

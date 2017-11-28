@@ -59,7 +59,7 @@ class ListenUpDatabase(ApplicationDatabase):
     
     DIRS = [QUESTIONS_DIR, SONGS_DIR]  # type: List[str]
     
-    DEFAULT_BUF_SIZE = 10  # type: int
+    DEFAULT_BUF_SIZE = 5  # type: int
     
     def __init__(self, path='data/listen_up.db', audio_dir='static/audio'):
         # type: (str, str) -> None
@@ -162,19 +162,29 @@ class ListenUpDatabase(ApplicationDatabase):
     
     # Question stuff
     
+    def _yield_questions(self, questions, last_question_id):
+        # type: (Iterable[Question], int) -> Iterable[Question]
+        """Yield each question, downloading audio and setting id first."""
+        for i, question in enumerate(questions):
+            question.id = i + last_question_id + 1
+            question.download_audio(self.questions_dir)
+            question.serialize_choices()
+            yield question
+    
     def _insert_questions(self, questions):
         # type: (Iterable[Question]) -> None
-        # FIXME must ensure that these new questions are unique w.r.t to already inserted questions
+        last_question_id = self.db.max_rowid('questions') or 0  # type: int
         self.db.cursor.executemany(
-                'INSERT INTO questions VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)',
-                (question.serialize_choices().as_tuple() for question in questions)
+                'INSERT INTO questions VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                (question.as_tuple() for question in
+                 self._yield_questions(questions, last_question_id))
         )
         self.commit()
     
     def _get_new_questions(self, user, num_questions):
         # type: (User, int) -> Set[Question]
         """Get exactly `num_questions` new, unique questions."""
-        original_questions = list(get_questions(user.options, num_questions, self.questions_dir))
+        original_questions = list(get_questions(user.options, num_questions))
         new_questions = set(original_questions) - self._questions
         self._questions.update(new_questions)
         skipped = len(original_questions) - len(new_questions)
@@ -199,7 +209,7 @@ class ListenUpDatabase(ApplicationDatabase):
                 [question_id]
         )
         result = self.db.cursor.fetchone()  # type: Tuple[unicode, unicode, unicode, unicode, unicode, unicode, str]
-        return Question.from_db(*result)
+        return Question.from_db(*((question_id,) + result))
     
     # FIXME needs to get question based on options
     # FIXME so must query all the matching DB rows
@@ -208,17 +218,23 @@ class ListenUpDatabase(ApplicationDatabase):
         # type: (User) -> Question
         """Get next `Question` for `user` that `user` hasn't answered before."""
         question_ids = user.questions  # type: intbitset
-        # TODO will this work if no rows in table yet?
-        max_question_id = self.db.max_rowid('questions')  # type: int
+        max_question_id = self.db.max_rowid('questions') or 0  # type: int
         # filtering possible question ids using fast intbitset in Python,
         # rather than running a complicated and slow SQL query.
         # will be performant if question_ids are dense, meaning few deleted questions
         question_id = next(
                 (id for id in xrange(1, max_question_id + 1) if
-                 id not in question_ids))  # type: int
-        if question_id is None:  # if there are no new questions left
+                 id not in question_ids),
+                max_question_id + 1)  # type: int
+        user.last_question_id = question_id
+        if question_id > max_question_id:
+            # if there are no questions left, download immediately
             self.add_questions(user)
-            question_id = max_question_id + 1
+            
+        if question_id + ListenUpDatabase.DEFAULT_BUF_SIZE > max_question_id:
+            # if there are only a few questions left, download in background
+            self.run_in_background(lambda: self.add_questions(user), name='download_questions')
+        
         return self.get_question(question_id)
     
     def complete_question(self, user, question):
@@ -232,9 +248,8 @@ class ListenUpDatabase(ApplicationDatabase):
     def _insert_song(self, song):
         # type: (Song) -> bool
         """Insert `song` into DB and return true if it is a new, unique song and was inserted."""
-        self.db.cursor.execute('INSERT INTO songs VALUES (?, ?, ?, ?, ?)', song.as_tuple())
         try:
-            pass
+            self.db.cursor.execute('INSERT INTO songs VALUES (?, ?, ?, ?, ?)', song.as_tuple())
         except IntegrityError:
             return False
         self.commit()
@@ -246,18 +261,21 @@ class ListenUpDatabase(ApplicationDatabase):
         Get the next random `Song` in the DB that `user` hasn't heard yet.
         If `record`, call play_song() for the song and `user`.
         """
-        new_song_ids = self._song_ids & user.songs  # type: intbitset
+        new_song_ids = self._song_ids - user.songs  # type: intbitset
         if len(new_song_ids) == 0:
             song = self.new_song()
         else:
             song_id = new_song_ids[random.randrange(0, len(new_song_ids))]
             self.db.cursor.execute(
-                    'SELECT name, artist, lyrics, audio_path FROM songs '
-                    'LIMIT 1 ORDER BY RANDOM()'
+                    'SELECT name, artist, lyrics, audio_path FROM songs WHERE id = ?',
+                    [song_id]
             )
             result = self.db.cursor.fetchone()  # type: Tuple[unicode, unicode, unicode, str]
             name, artist, lyrics, audio_path = result
             song = Song(song_id, artist, name, lyrics, audio_path)
+        
+        if len(new_song_ids) <= 1:
+            self.run_in_background(lambda: self.new_song(), name='download_song')
         
         if record:
             self.play_song(user, song)

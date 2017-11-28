@@ -1,24 +1,27 @@
 from __future__ import print_function
 
 from flask import Flask, sessions
-from flask.json import JSONDecoder
-from flask.json import JSONEncoder
-from typing import Callable, Any, Dict, NamedTuple, Union
+from flask.json import JSONDecoder, JSONEncoder
+from typing import Any, Callable, Dict, NamedTuple, Union
 
 from util.namedtuple_factory import all_namedtuples
 from util.oop import override
-
-
-def serialize_named_tuple(named_tuple):
-    # type: (NamedTuple) -> Dict[str, Any]
-    return {'_type': repr(type(named_tuple)), 'fields': named_tuple}
 
 
 @override(sessions)
 def _tag(_super, o):
     # type: (Callable[Any, Any]) -> Dict[str, Any] | Any
     if hasattr(o, '_asdict'):
-        return serialize_named_tuple(o)
+        named_tuple = o  # type: NamedTuple
+        if hasattr(named_tuple, 'as_tuple'):
+            as_tuple = named_tuple.as_tuple()
+        else:
+            as_tuple = named_tuple
+        print(as_tuple)
+        return {
+            '_type': repr(type(named_tuple)),
+            'fields': tuple(sessions._tag(o) for o in as_tuple)
+        }
     return _super(o)
 
 
@@ -27,14 +30,14 @@ class NamedTupleJsonEncoder(JSONEncoder):
         chunks = super(NamedTupleJsonEncoder, self).iterencode(o, _one_shot)
         for chunk in chunks:
             yield self.convert(chunk)
-
+    
     @staticmethod
     def convert(o):
         # type: (Any) -> Dict[str, Any] | Any
         if not hasattr(o, '_asdict'):
             return o
-        return serialize_named_tuple(o)
-
+        return o  #serialize_named_tuple(o)
+    
     def default(self, o):
         # type: (Any) -> Dict[str, Any]
         new_o = self.convert(o)
@@ -46,9 +49,9 @@ class NamedTupleJsonEncoder(JSONEncoder):
 class NamedTupleJsonDecoder(JSONDecoder):
     def __init__(self, *args, **kwargs):
         kwargs['object_hook'] = NamedTupleJsonDecoder.make_object_hook(
-            kwargs.get('object_hook', None))
+                kwargs.get('object_hook', None))
         super(NamedTupleJsonDecoder, self).__init__(*args, **kwargs)
-
+    
     @staticmethod
     def make_object_hook(_super):
         def object_hook(obj):
@@ -60,6 +63,7 @@ class NamedTupleJsonDecoder(JSONDecoder):
                     return _super(obj)
             # noinspection PyProtectedMember
             return all_namedtuples[obj['_type']]._make(obj['fields'])
+        
         return object_hook
 
 

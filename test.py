@@ -14,8 +14,8 @@ if __name__ == '__main__':
         print(db.user_exists(u'Khyber'))
         user = db.get_user(u'Khyber', u'Sen')
         print(user)
-        db.complete_question(user, Question(1, None, None, None, None, None, None, None))
+        # db.complete_question(user, Question(1, None, None, None, None, None, None, None))
         print(user)
         
-        song = db.new_song()
-        print(song)
+        # song = db.new_song()
+        # print(song)

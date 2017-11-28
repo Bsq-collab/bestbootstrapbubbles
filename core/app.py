@@ -4,42 +4,82 @@ import os
 from sys import stderr
 
 from flask import Flask, Response, flash, render_template, request, session
-from typing import Callable
+from typing import Callable, Dict
 from werkzeug.datastructures import ImmutableMultiDict
 
-from core import question_options
+from core import background, question_options
 from core.listen_up_db import ListenUpDatabase
 from core.question_options import InvalidQuestionOptionException
 from core.users import User
-from util.flask.flask_json import use_named_tuple_json
 from util.flask.flask_utils import form_contains, post_only, preconditions, reroute_to, \
     session_contains
 from util.flask.flask_utils_types import Precondition, Router
 from util.flask.template_context import add_template_context
 
-app = Flask(__name__, template_folder='../templates')
+app = Flask(__name__, template_folder='../templates', static_folder='../static')
 
 db = ListenUpDatabase()
 
+private_sesssion = {}  # type: Dict[int, User]
+
 # Keys in session
-USER_KEY = 'user'
+UID_KEY = 'uid'
 
 
 def get_user():
     # type: () -> User
     """Get User in session."""
-    return session[USER_KEY]
+    return private_sesssion[session[UID_KEY]]
 
 
-is_logged_in = session_contains(USER_KEY)  # type: Precondition
+def set_user(user):
+    # type: (User) -> None
+    """Set/put User in session."""
+    session[UID_KEY] = user.id
+    private_sesssion[user.id] = user
+
+
+def remove_user():
+    # type: () -> None
+    """Remove User from session"""
+    del private_sesssion[session[UID_KEY]]
+    del session[UID_KEY]
+
+
+is_logged_in = session_contains(UID_KEY)  # type: Precondition
 is_logged_in.func_name = 'is_logged_in'
+
+
+@app.before_request
+def pause_background_threads():
+    # type: () -> ()
+    """
+    Acquire background lock to stop background threads from making any more HTTP requests
+    during the Flask request.
+    """
+    # signal.pthread_kill() doesn't exist in Python 2
+    # so can't stop and resume background threads (using SIGSTOP, SIGCONT)
+    # that may be in the middle of downloading something
+    # so the website might be very slow when downloading stuff
+    # because the flask route is being block
+    background.lock.acquire()
+
+
+@app.after_request
+def resume_background_threads(response):
+    # type: (Response) -> Response
+    """Release background lock to allow background threads to continue."""
+    # see comment in pause_background_threads()
+    background.lock.release()
+    return response
 
 
 @app.reroute_from('/')
 @app.route('/welcome')
 def welcome():
     # type: () -> Response
-    return render_template('welcome.jinja2', is_loggin_in=is_logged_in())
+    """Render welcome page."""
+    return render_template('welcome.html', is_loggin_in=is_logged_in())
 
 
 def get_user_info():
@@ -52,14 +92,20 @@ def get_user_info():
 @app.route('/login')
 def login():
     # type: () -> Response
+    """Render the login page or reroute to answer_questions if already logged in."""
     if is_logged_in():
         return reroute_to(answer_question)
-    return render_template('login.jinja2')
+    return render_template('login.html')
 
 
 @preconditions(login, post_only, form_contains('username', 'password'))
 def auth_or_signup(db_user_supplier):
     # type: (Callable[[unicode, unicode], User]) -> Response
+    """
+    Auth or signup with the username and password in the form
+    and given the DB function that gets the user from the DB,
+    possibly inserting the new user.
+    """
     if is_logged_in():
         reroute_to(answer_question)
     username, password = get_user_info()
@@ -72,13 +118,14 @@ def auth_or_signup(db_user_supplier):
             print(e, file=stderr)
             return reroute_to(login)
     
-    session[USER_KEY] = user
+    set_user(user)
     return reroute_to(answer_question)
 
 
 @app.route('/signup', methods=['get', 'post'])
 def signup():
     # type: () -> Response
+    """Add the user to the database and log them in."""
     return auth_or_signup(db.add_user)
 
 
@@ -100,32 +147,33 @@ def auth():
 @logged_in
 def answer_question():
     # type: () -> Response
-    """Display a User's home page with all of his edited and unedited Stories."""
+    """Display the user's next question to answer."""
     user = get_user()
-    if user.has_won():
-        return render_template('congrats.jinja2', user=user, song=db.next_song(user, record=True))
-    else:
-        with db:
-            return render_template('questions.jinja2',
+    with db:
+        if user.has_won():
+            return render_template('congrats.html', user=user, song=db.next_song(user, record=True))
+        else:
+            return render_template('questions.html',
                                    user=user,
                                    question=db.next_question(user),
                                    )
 
 
-@app.route('/check_question', methods=['get', 'post'])
+@app.route('/check_answer', methods=['get', 'post'])
 @logged_in
 @preconditions(answer_question, post_only, form_contains('answer'))
-def check_question():
+def check_answer():
     # type: () -> Response
+    """Check the answer to the question the user has submitted."""
     user = get_user()
     answer = request.form['answer']
     with db:
         question = db.get_question(user.last_question_id)
         if answer != question.answer:
-            # TODO
-            pass
+            flash(u'{} is the wrong answer'.format(answer))
         else:
             db.complete_question(user, question)
+            print(u'{}\'s points: {}'.format(user.username, user.points))
     return reroute_to(answer_question)
 
 
@@ -133,7 +181,8 @@ def check_question():
 @logged_in
 def choose_options():
     # type: () -> Response
-    return render_template('choose_options.jinja2',
+    """Render the customize page, where the user can change their question options."""
+    return render_template('customize.html',
                            types=question_options.types.viewkeys(),
                            difficulties=question_options.difficulties.viewkeys(),
                            categories=question_options.categories.viewkeys(),
@@ -145,6 +194,7 @@ def choose_options():
 @preconditions(choose_options, post_only, form_contains(*question_options.fields.keys()))
 def set_options():
     # type: () -> Response
+    """Set the user's question options from the form submitted in choose_options()."""
     try:
         get_user().set_options(request.form)
     except InvalidQuestionOptionException as e:
@@ -156,7 +206,8 @@ def set_options():
 @app.route('/logout')
 def logout():
     # type: () -> Response
-    del session[USER_KEY]
+    """Log the user out."""
+    remove_user()
     return reroute_to(welcome)
 
 
@@ -165,5 +216,5 @@ def run(debug=True):
     app.debug = True
     app.secret_key = os.urandom(32)
     add_template_context(app)
-    use_named_tuple_json(app)
+    # use_named_tuple_json(app)
     app.run()

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block body %}
+  {{ br(5) }}
+  <h1> Welcome!! </h1>
+  {# TODO add explanation of what Listen Up is #}
+  {{ br(1) }}
+  <strong>Have an account?</strong>{{ br(1) }}
+
+  <button type="button" class="btn btn-link">
+    <!--suppress HtmlUnknownTarget -->
+    <a href="/login">Log in</a>
+  </button>
+
+  {{ br(2) }}
+  <strong> Need one?</strong>{{ br(1) }}
+  <button type="button" class="btn btn-link">
+    <!--suppress HtmlUnknownTarget -->
+    <a href="/signup"> Make an account</a>
+  </button>
+{% endblock body %}

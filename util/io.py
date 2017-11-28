@@ -1,8 +1,7 @@
+import errno
 import os
 
-import errno
-
-from typing import AnyStr
+from typing import Union
 
 
 def mkdir_if_not_exists(dir_path):
@@ -15,6 +14,8 @@ def mkdir_if_not_exists(dir_path):
 
 
 def sanitize_filename(filename):
-    # type: (AnyStr) -> str
-    # TODO
+    # type: (Union[str, unicode]) -> str
+    illegal_chars = '/<>:"\'|?*'
+    for c in illegal_chars:
+        filename = filename.replace(c, '_')
     return filename

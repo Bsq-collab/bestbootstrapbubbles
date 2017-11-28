@@ -83,7 +83,7 @@ class User(Tupleable):
     
     @override
     def as_tuple(self):
-        # type: () -> Tuple[int, unicode, int, intbitset, intbitset, int, int, int, Dict[str, Any]]
+        # type: () -> Tuple[int, unicode, int, intbitset, intbitset, int, int, int, QuestionOptions]
         return self.id, self.username, self.points, self.questions, self.songs, \
                self.last_question_id, self.starting_points, self.winning_points, self.options
     
@@ -133,10 +133,12 @@ class User(Tupleable):
     def has_won(self):
         # type: () -> bool
         """Check if user has won game yet."""
-        return self.current_game_points() > self.winning_points
+        won = self.current_game_points() >= self.winning_points
+        if won:
+            self.starting_points = self.points
+        return won
     
     def set_options(self, options):
         # type: (Dict[str, str]) -> None
         """Set fields from dict where keys are `QuestionOptions`'s field names."""
         self.options.set_options(options)
-    

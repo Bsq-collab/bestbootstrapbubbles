@@ -200,3 +200,6 @@ Changed the design doc to reflect our changes
 bayanB -- 2017-11-25 23:03:14
 Added bootstrap styling to all templates
 
+khyberS -- 2017-11-28 03:10:56
+Made almost everything work.  Just a few bugs and style stuff left I think.
+

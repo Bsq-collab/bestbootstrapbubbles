@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+  - Login
+{% endblock %}
+
+{% block body %}
+  <!--suppress HtmlUnknownTarget -->
+  <form action="/auth" method="post" class="form-group">
+
+    {# FIXME what's this msg#}
+    {{ msg }}
+
+    {{ br(1) }}
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" class="form-control" id="username" name="username" required>
+      {{ br(1) }}
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" class="form-control" id="password" name="password" required>
+      {{ br(1) }}
+    </div>
+
+    <input type="submit" value="Sign in" class="btn btn-primary">
+
+    {{ br(1) }}
+    Need an account: <a href="/register"> Register </a>
+  </form>
+{% endblock %}

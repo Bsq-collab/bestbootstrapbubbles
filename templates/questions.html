@@ -1,29 +1,43 @@
-<html>
-  <head>
-    <title>Questions</title>
-     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends "base.html" %}
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-  </head>
-  <body>
-    <center>
-    Question: {{ question.question }}
-    <br>
-    Answer choices:
-    {% for element in question.choices %}
+{% block title %}
+  - Questions
+{% endblock %}
 
-    {{ element }}
+{% block body %}
+  <audio controls autoplay>
+    <source src="{{ question.audio_path }}">
+    Your browser does not support the audio tag for wav files.
+  </audio>
 
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {{ br(3) }}
+      {% for message in messages %}
+        <h2>{{ message }}</h2>
+      {% endfor %}
+      {{ br(2) }}
+    {% else %}
+      {{ br(3) }}
+    {% endif %}
+  {% endwith %}
+
+  Question: {{ question.question }}
+  {{ br(1) }}
+  Answer choices:
+  {{ br(1) }}
+  <!--suppress HtmlUnknownTarget -->
+  <form action="/check_answer" method="post">
+    {% for choice in question.choices %}
+      <div class="row align-center">
+        <label>
+          <input type="submit" name="answer" readonly value="{{ choice|safe }}">
+        </label>
+      </div>
     {% endfor %}
-    </center>
-    <br>
-    <form>
-      <div class="form-group">
-        <label for="answer">Your Answer Here:</label>
-        <input type="text" class="form-control" id="answer" name="input" text="Answer">
-      <button type="submit" class="btn btn-primary" name="done" value="done">Submit </button>
-    </form>
-  </body>
-</html>
+  </form>
+
+  {{ br(2) }}
+  <h3>You have {{ user.points }} points!</h3>
+
+{% endblock %}

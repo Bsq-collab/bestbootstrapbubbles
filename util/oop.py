@@ -1,3 +1,5 @@
+import functools
+
 from typing import Any, Callable, Dict, Tuple, Type, Union
 
 from util.types import Function
@@ -31,10 +33,11 @@ def override(klass):
         # type: (Overrider) -> None
         func_name = override_method.func_name
         super_method = getattr(klass, func_name)
-
-        def override_closure(self, *args, **kwargs):
-            # type: (T, Tuple, Dict) -> R
-            return override_method(super_method, self, *args, **kwargs)
+        
+        @functools.wraps(override_method)
+        def override_closure(*args, **kwargs):
+            # type: (Tuple, Dict) -> R
+            return override_method(super_method, *args, **kwargs)
 
         setattr(klass, func_name, override_closure)
         return None
