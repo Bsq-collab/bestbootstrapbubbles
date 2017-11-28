@@ -76,11 +76,22 @@ def auth_or_signup(db_user_supplier):
     return reroute_to(answer_question)
 
 
-@app.route('/signup', methods=['get', 'post'])
+@app.route('/signup', methods=["post","get"])
 def signup():
     # type: () -> Response
-    return auth_or_signup(db.add_user)
+    return render_template("signup.jinja2")
+    #return auth_or_signup(db.add_user)
 
+
+@app.route("/check_register", methods=["get"])
+def check_register():
+
+        #Check if user in tables already.
+    if request.args.get("password1") == request.args.get("password2"):
+        #hash password and input user into the system
+        print("Hey a thing")
+
+    pass
 
 """Precondition decorator rerouting to login if is_logged_in isn't True."""
 logged_in = preconditions(login, is_logged_in)  # type: Router

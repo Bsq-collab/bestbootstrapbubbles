@@ -206,3 +206,6 @@ added fire emojis to readme
 brianL -- 2017-11-27 13:19:51
 debugging app.py in progress
 
+brianL -- 2017-11-28 01:25:48
+The links to signup and login appear to work now. Now for the questions...
+
