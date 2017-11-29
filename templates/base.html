@@ -5,6 +5,7 @@
     <title>Listen Up{% block title %}{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!--suppress HtmlUnknownTarget -->
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
 
     <!-- Bootstrap CSS -->
@@ -18,9 +19,14 @@
   </head>
   <body class="center">
     <nav class="navbar fixed-top navbar-light bg-faded">
-      <a class="navbar-brand" href="/welcome"><i class="em em-fire"></i> Listen Up <i class="em em-fire"></i></a>
-      <a class="nav-link" href="/logout">Logout <span class="sr-only">(current)</span></a>
-      </nav>
+      <!--suppress HtmlUnknownTarget -->
+      <a class="navbar-brand" href="/welcome"><i class="em em-fire"></i> Listen Up <i
+          class="em em-fire"></i></a>
+      <!--suppress HtmlUnknownTarget -->
+      {% if is_logged_in() %}
+        <a class="nav-link" href="/logout">Logout <span class="sr-only">(current)</span></a>
+      {% endif %}
+    </nav>
     {% block body %}
 
     {% endblock body %}

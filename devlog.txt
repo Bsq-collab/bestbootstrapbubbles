@@ -221,3 +221,6 @@ Added navbar, /logout is broken. Moved audio part down the page so it doesn't in
 naotakaK -- 2017-11-28 19:47:50
 Fixed navbar interaction on congrats template. Lyrics are now displayed on the congrats page in case user does not hvae audio capabilities. Congrats still has padding issues that need to be fixed.
 
+khyberS -- 2017-11-28 21:56:27
+Fixed signup() route and made logout button only appear when logged in.
+

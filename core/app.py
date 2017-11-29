@@ -14,7 +14,7 @@ from core.users import User
 from util.flask.flask_utils import form_contains, post_only, preconditions, reroute_to, \
     session_contains
 from util.flask.flask_utils_types import Precondition, Router
-from util.flask.template_context import add_template_context
+from util.flask.template_context import add_template_context, context
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 
@@ -48,6 +48,7 @@ def remove_user():
 
 is_logged_in = session_contains(UID_KEY)  # type: Precondition
 is_logged_in.func_name = 'is_logged_in'
+context[is_logged_in.func_name] = is_logged_in
 
 
 @app.before_request
@@ -79,7 +80,7 @@ def resume_background_threads(response):
 def welcome():
     # type: () -> Response
     """Render welcome page."""
-    return render_template('welcome.html', is_loggin_in=is_logged_in())
+    return render_template('welcome.html')
 
 
 def get_user_info():
@@ -130,21 +131,11 @@ def auth_or_signup(db_user_supplier):
     return reroute_to(answer_question)
 
 
-@app.route('/signup', methods= ['get', 'post'])
+@app.route('/signup', methods=['get', 'post'])
 def signup():
     # type: () -> Response
     """Add the user to the database and log them in."""
-    return render_template("signup.html")
-    #return auth_or_signup(db.add_user)
-
-@app.route('/check_register', methods= ['post'])
-def check_reg():
-    if request.args.get("password1") == request.args.get("password2"):
-        db.add_user(request.args.get("username"), request.args.get("password1"))
-    else:
-        
-        return 
-
+    return auth_or_signup(db.add_user)
 
 
 """Precondition decorator rerouting to login if is_logged_in isn't True."""
@@ -222,6 +213,7 @@ def set_options():
 
 
 @app.route('/logout')
+@logged_in
 def logout():
     # type: () -> Response
     """Log the user out."""

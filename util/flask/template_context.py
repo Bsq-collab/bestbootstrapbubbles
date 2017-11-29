@@ -65,11 +65,17 @@ def br(n):
 context = _filter_hidden(context)
 
 context['print'] = print
+context['vars'] = vars
+context['globals'] = globals
+context['list'] = list
+context['set'] = set
+context['dict'] = dict
 
 
 def add_template_context(app):
     # type: (Flask) -> None
     for name, value in context.viewitems():
+        # print(name, value)
         app.add_template_global(value, name)
 
 
