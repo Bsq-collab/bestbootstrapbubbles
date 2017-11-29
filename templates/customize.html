@@ -14,7 +14,7 @@
     you'll get.
   </p>
   {{ br(1) }}
-  <div class="mx-auto" style="width: 200px;">
+  <div class="mx-auto" style="width: 390px;">
     <!--suppress HtmlUnknownTarget -->
     <form action="/set_options" method="post" id="options">
       <div class="form-group">
@@ -23,7 +23,7 @@
         <select class="form-control" id="difficulty" name="difficulty">
           <option selected>Default</option>
           {% for difficulty in difficulties %}
-            <option> {{ difficulty }}</option>
+            <option>{{ difficulty }}</option>
           {% endfor %}
         </select>
       </div>
@@ -50,9 +50,11 @@
         </select>
       </div>
       {{ br(1) }}
+      <center>
       <button type="submit" class="btn btn-primary" name="done" value="Done" form="options">
         Customize!
       </button>
+    </center>
     </form>
   </div>
 {% endblock %}

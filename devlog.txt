@@ -11,25 +11,30 @@ pd 7
 ------------------------------------------
 OBSTACLES OVERCOME
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-wow we so BOSS bc...
+Musixmatch didn't censor curse words so we had to do that
 
 UNRESOLVED ISSUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-blah blah pesky bug...
-maybe some of these will move into the Obs.Ovrcm section...
+
 
 
 COOL STUFF LEARNED
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-wow! oo!...
+Learned about defining functions within functions
+Learned about python classes
+
 
 MID-DEVELOPMENT DESIGN CHANGES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Database schema changed to have only three databases.
+Customize clarification: increased likelihood of those questions, not guaranteed only those quesitons.
+Can't customize right after logging in regardless of the number of points.
+      Has to be earned each time
 
 LESSONS LEARNED
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-tales of wisdom gained...
-
+Nice documentation really makes everything easier
+Always have a back up
 
 ||||||||||||||||||||||||||||||||||||||||||
 
@@ -232,4 +237,7 @@ Made order of answer choices random so correct answer wasn't always just the fir
 
 naotakaK -- 2017-11-28 22:17:51
 Fixed minor bug on /login to link to /register
+
+brianL -- 2017-11-29 01:23:19
+Fixed the visibility of choose_options dropdown, added link to choose_options in welcome.
 
