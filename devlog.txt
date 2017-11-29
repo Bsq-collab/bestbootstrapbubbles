@@ -11,7 +11,14 @@ pd 7
 ------------------------------------------
 OBSTACLES OVERCOME
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Musixmatch didn't censor curse words so we had to do that
+
+Musixmatch didn't censor curse words so we had to do that.
+
+We had to cache API responses, especially for Watson,
+so that we didn't immediately go over our limit, and so our website doesn't take forever to load.
+
+Managed to download Watson audio (with is very slow) semi-asynchronously,
+so the website doesn't appear as slow sometimes.
 
 UNRESOLVED ISSUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -26,7 +33,7 @@ Learned about python classes
 
 MID-DEVELOPMENT DESIGN CHANGES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Database schema changed to have only three databases.
+Database schema changed to have only three tables.
 Customize clarification: increased likelihood of those questions, not guaranteed only those quesitons.
 Can't customize right after logging in regardless of the number of points.
       Has to be earned each time

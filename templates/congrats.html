@@ -5,20 +5,34 @@
 {% endblock %}
 
 {% block body %}
-    {{ br(3) }}
+  {{ br(3) }}
+  <center>
     <h1> WOOOO!!! Congrats {{ user.username }}</h1>
+  </center>
+  {{ br(1) }}
+  <p id="congrats-text">
     Now that you've completed {{ user.winning_points }} questions correctly,
     you get to listen to {{ song.name }} by {{ song.artist }},
+    {{ br(1) }}
     and you can choose which questions you'd like to play
     <!--suppress HtmlUnknownTarget -->
     <a href="/choose_options"> here</a>.
-    {{ br(2) }}
+  </p>
+  {{ br(1) }}
 
-    <h3>Lyrics:</h3>
-    {{ song.lyrics }}
+  <h3 class="lyrics">Lyrics:</h3>
+  {{ br(1) }}
+  <p class="lyrics">{{ song.lyrics }}</p>
+
+  <center>
+    <!--suppress HtmlUnknownTarget -->
+    <a href="/answer_question" class="btn btn-link">Play Again</a>
     {{ br(2) }}
     <audio controls autoplay>
       <source src="{{ song.audio_path }}">
       Your browser does not support the audio tag for wav files.
     </audio>
+  </center>
+
+
 {% endblock %}

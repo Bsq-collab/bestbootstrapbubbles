@@ -80,15 +80,7 @@ def resume_background_threads(response):
 def welcome():
     # type: () -> Response
     """Render welcome page."""
-    try:
-    	user = get_user()
-    	print("something")
-    	q5done = user.points>=5
-    except Exception as e:
-    	print(e)
-    	print("Uh oh something happened")
-    	q5done = False 
-    return render_template('welcome.html',q5done=q5done)
+    return render_template('welcome.html')
 
 
 def get_user_info():

@@ -9,13 +9,13 @@
   {% include "flash.html" %}
 
   Question: {{ question.question }}
-  {{ br(1) }}
+  {{ br(2) }}
   Answer choices:
-  {{ br(1) }}
+  {{ br(2) }}
   <!--suppress HtmlUnknownTarget -->
   <form action="/check_answer" method="post">
     {% for choice in question.choices %}
-      <div class="row align-center">
+      <div class="row">
         <label>
           <input type="submit" name="answer" readonly value="{{ choice|safe }}">
         </label>
@@ -23,12 +23,13 @@
     {% endfor %}
   </form>
 
-  <audio controls autoplay>
-    <source src="{{ question.audio_path }}">
-    Your browser does not support the audio tag for wav files.
-  </audio>
+  <center>
+    <audio controls autoplay>
+      <source src="{{ question.audio_path }}">
+      Your browser does not support the audio tag for wav files.
+    </audio>
 
-  {{ br(2) }}
-  <h3>You have {{ user.points }} points!</h3>
-
+    {{ br(2) }}
+    <h3>You have {{ user.points }} points!</h3>
+  </center>
 {% endblock %}
