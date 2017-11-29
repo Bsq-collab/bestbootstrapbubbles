@@ -2,8 +2,13 @@
 
 {% block body %}
   {{ br(5) }}
-  <h1> Welcome!! </h1>
-  {# TODO add explanation of what Listen Up is #}
+<center><h1> Welcome!! </h1>
+
+<div class="mx-auto" style="width: 200px;">
+  Listen Up is a super fun game which uses the Watson Text to Speech API, Open_Trivia API, and Musixmatch API.
+  After logging in, you'll have to answer as many questions as you can correctly.
+  Once you answer five questions correctly you'll be rewarded with a special song. You will also be able to customize the questions as a reward for getting at least five correct.
+</div>
   {{ br(1) }}
   <strong>Have an account?</strong>{{ br(1) }}
 
@@ -18,4 +23,5 @@
     <!--suppress HtmlUnknownTarget -->
     <a href="/register"> Make an account</a>
   </button>
+</center>
 {% endblock body %}

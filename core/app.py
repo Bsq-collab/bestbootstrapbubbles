@@ -143,7 +143,7 @@ def check_reg():
         db.add_user(request.args.get("username"), request.args.get("password1"))
     else:
         
-    return 
+        return 
 
 
 
