@@ -72,6 +72,8 @@ class Song(Tupleable, AudioDownloader):
             'bitch': 'beep',
             'damn': 'dang',
             'cocaine': 'coca-cola',
+            'nigga': 'beep',
+            'asshole': 'a**hole',
             '\n': ' '
         }
     

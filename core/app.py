@@ -137,6 +137,7 @@ def signup():
     return render_template("signup.html")
     #return auth_or_signup(db.add_user)
 
+'''
 @app.route('/check_register', methods= ['post'])
 def check_reg():
     if request.args.get("password1") == request.args.get("password2"):
@@ -144,7 +145,7 @@ def check_reg():
     else:
         
         return 
-
+'''
 
 
 """Precondition decorator rerouting to login if is_logged_in isn't True."""
