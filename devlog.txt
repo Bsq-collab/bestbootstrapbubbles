@@ -215,3 +215,6 @@ Made almost everything work.  Just a few bugs and style stuff left I think.
 khyberS -- 2017-11-28 15:21:06
 Fixed register() route and signup.html.  Uses JS to check matching passwords.
 
+naotakaK -- 2017-11-28 19:26:08
+Added navbar, /logout is broken. Moved audio part down the page so it doesn't interfere with navbar and looks a bit cleaner.
+

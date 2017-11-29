@@ -5,10 +5,6 @@
 {% endblock %}
 
 {% block body %}
-  <audio controls autoplay>
-    <source src="{{ question.audio_path }}">
-    Your browser does not support the audio tag for wav files.
-  </audio>
 
   {% include "flash.html" %}
 
@@ -26,6 +22,11 @@
       </div>
     {% endfor %}
   </form>
+
+  <audio controls autoplay>
+    <source src="{{ question.audio_path }}">
+    Your browser does not support the audio tag for wav files.
+  </audio>
 
   {{ br(2) }}
   <h3>You have {{ user.points }} points!</h3>

@@ -14,9 +14,13 @@
           crossorigin="anonymous">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
   </head>
   <body class="center">
+    <nav class="navbar fixed-top navbar-light bg-faded">
+      <a class="navbar-brand" href="/welcome"><i class="em em-fire"></i> Listen Up <i class="em em-fire"></i></a>
+      <a class="nav-link" href="/logout">Logout <span class="sr-only">(current)</span></a>
+      </nav>
     {% block body %}
 
     {% endblock body %}
