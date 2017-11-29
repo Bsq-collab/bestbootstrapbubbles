@@ -1,3 +1,5 @@
+import random
+
 import simplejson as json
 from typing import Any, Dict, Iterable, List, Tuple
 
@@ -53,6 +55,10 @@ class Question(Tupleable, AudioDownloader):
         self.type = type
         self.difficulty = difficulty
         self.category = category
+        
+        choices = list(self.choices)
+        random.shuffle(choices)
+        self.choices = tuple(choices)
     
     @classmethod
     def _make(cls, fields):
