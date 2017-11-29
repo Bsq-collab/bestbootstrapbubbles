@@ -248,3 +248,6 @@ Fixed minor bug on /login to link to /register
 brianL -- 2017-11-29 01:23:19
 Fixed the visibility of choose_options dropdown, added link to choose_options in welcome.
 
+bayanB -- 2017-11-29 09:07:58
+bleeped lyrics are displayed
+
