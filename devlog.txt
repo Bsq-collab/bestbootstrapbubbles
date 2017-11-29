@@ -238,3 +238,6 @@ Made order of answer choices random so correct answer wasn't always just the fir
 naotakaK -- 2017-11-28 22:17:51
 Fixed minor bug on /login to link to /register
 
+brianL -- 2017-11-29 01:23:19
+Fixed the visibility of choose_options dropdown, added link to choose_options in welcome.
+

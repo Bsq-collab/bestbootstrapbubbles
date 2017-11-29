@@ -15,16 +15,21 @@
     {{ br(1) }}
     <strong>Have an account?</strong>{{ br(1) }}
 
-    <button type="button" class="btn btn-link">
       <!--suppress HtmlUnknownTarget -->
-      <a href="/login">Log in</a>
-    </button>
+      <a href="/login" class="btn btn-link">Log in</a>
 
     {{ br(2) }}
-    <strong> Need one?</strong>{{ br(1) }}
-    <button type="button" class="btn btn-link">
+    <strong>Need one?</strong>{{ br(1) }}
+
       <!--suppress HtmlUnknownTarget -->
-      <a href="/register"> Make an account</a>
-    </button>
+      <a href="/register" class="btn btn-link"> Make an account</a>
+
+    {{br(2)}}
+    {%if q5done%}
+    <strong>Want specific questions?</strong>{{ br(1) }}
+
+      <!--suppress HtmlUnknownTarget -->
+      <a href="/choose_options" class="btn btn-link">Customize questions</a>
+    {%endif%}
   </center>
 {% endblock body %}
