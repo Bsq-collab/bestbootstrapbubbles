@@ -1,7 +1,7 @@
-markupsafe
 typing
 flask
 werkzeug
+markupsafe
 requests
 watson_developer_cloud
 intbitset
