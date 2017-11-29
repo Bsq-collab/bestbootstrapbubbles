@@ -218,3 +218,6 @@ Fixed register() route and signup.html.  Uses JS to check matching passwords.
 naotakaK -- 2017-11-28 19:26:08
 Added navbar, /logout is broken. Moved audio part down the page so it doesn't interfere with navbar and looks a bit cleaner.
 
+naotakaK -- 2017-11-28 19:47:50
+Fixed navbar interaction on congrats template. Lyrics are now displayed on the congrats page in case user does not hvae audio capabilities. Congrats still has padding issues that need to be fixed.
+

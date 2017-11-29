@@ -5,22 +5,20 @@
 {% endblock %}
 
 {% block body %}
-  <audio controls autoplay>
-    <source src="{{ song.audio_path }}">
-    Your browser does not support the audio tag for wav files.
-  </audio>
-  {{ br(3) }}
-  <h1> WOOOO!!! Congrats {{ user.username }}</h1>
-  Now that you've completed {{ user.winning_points }} number of questions correctly,
-  you get to listen to {{ song.name }} by {{ song.artist }},
-  and you can choose which questions you'd like to play
-  <!--suppress HtmlUnknownTarget -->
-  <a href="/choose_options"> here</a>.
-  {{ br(2) }}
-
-  <button type="button" class="btn btn-link">
+    {{ br(3) }}
+    <h1> WOOOO!!! Congrats {{ user.username }}</h1>
+    Now that you've completed {{ user.winning_points }} number of questions correctly,
+    you get to listen to {{ song.name }} by {{ song.artist }},
+    and you can choose which questions you'd like to play
     <!--suppress HtmlUnknownTarget -->
-    <a href="/logout">Logout</a>
-  </button>
+    <a href="/choose_options"> here</a>.
+    {{ br(2) }}
 
+    <h3>Lyrics:</h3>
+    {{ song.lyrics }}
+    {{ br(2) }}
+    <audio controls autoplay>
+      <source src="{{ song.audio_path }}">
+      Your browser does not support the audio tag for wav files.
+    </audio>
 {% endblock %}
